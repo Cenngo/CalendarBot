@@ -1,6 +1,6 @@
 ﻿namespace CalendarBot
 {
-    internal enum RecursionInterval
+    public enum RecursionInterval
     {
         None,
         Day,

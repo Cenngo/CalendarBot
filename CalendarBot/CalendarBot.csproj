@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
     <LangVersion>latest</LangVersion>
-    <StartupObject>HydraBot.Program</StartupObject>
+    <StartupObject>CalendarBot.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1,5 +1,6 @@
 ﻿using Discord;
 using Discord.Interactions;
+using LiteDB;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,23 +32,35 @@ namespace CalendarBot
         [Group("calendar", "create/display upcoming events")]
         public sealed class Calendar : InteractionModuleBase<SocketInteractionCommandContext>
         {
-            [SlashCommand("create", "create a calendar event")]
-            public async Task Create()
-            {
+            public ILiteCollection<CalendarEvent> Events { get; set; }
 
+            [SlashCommand("create", "create a calendar event")]
+            public async Task Create(string name, string description, int day, int month, int year, [Summary("target-user")] IUser targetUser)
+            {
+                var value = Events.Insert(new CalendarEvent {
+                    Name = name,
+                    Description = description,
+                    DateAndTime = new DateTime(year, month, day),
+                    Color = Color.Orange,
+                    Channel = Context.Channel,
+                    Guild = Context.Guild,
+                    RecursionInterval = RecursionInterval.None,
+                    User = Context.User,
+                    TargetUsers = new List<IUser> { targetUser }
+                });
             }
 
             [SlashCommand("display", "display the events of a month")]
             public async Task Display()
             {
-                
+                var first = Events.FindOne(x => true);
             }
         }
 
         [ComponentInteraction("monthSelect")]
         public async Task HandleMonthSelect(string[] values)
         {
-            Context.Guild.Emote
+            
         }
     }
 }

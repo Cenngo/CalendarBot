@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace CalendarBot
 {
-    internal sealed class CalendarEvent
+    public sealed class CalendarEvent
     {
-        [BsonId(true)]
-        public ulong Id { get; init; }
+        [BsonId]
+        public Guid Guid {  get; set; }
 
         public IUser User { get; init; }
-        public IChannel Channel { get; init; }
+        public IMessageChannel Channel { get; init; }
         public IGuild Guild { get; init; }
         public DateTime DateAndTime { get; init; }
         public string Name { get; init; }

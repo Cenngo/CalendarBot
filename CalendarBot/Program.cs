@@ -36,6 +36,9 @@ namespace CalendarBot
             new CalendarBot.EventHandler<DiscordSocketClient>(services, configuration)
                 .RegisterCommands();
 
+            var calHandler = services.GetRequiredService<CalendarHandler>();
+            calHandler.Initialize();
+
             var discord = services.GetRequiredService<DiscordSocketClient>();
             //var discordOptions = services.GetRequiredService<DiscordOptions>();
 
@@ -81,7 +84,7 @@ namespace CalendarBot
                     collection.EnsureIndex(x => x.DateAndTime);
                     return collection;
                 })
-                .AddSingleton<System.Timers.Timer>()
+                .AddSingleton<CalendarHandler>()
                 .BuildServiceProvider();
         }
     }

@@ -8,7 +8,7 @@ namespace CalendarBot
 {
     internal static class StringUtility
     {
-        public static string CreateCalendarPage(int year, int month)
+        public static void CreateCalendarPage(int year, int month)
         {
             DateTime firstDay = new(year, month, 1);
 
