@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using LiteDB;
 
 namespace CalendarBot
 {
@@ -74,6 +75,13 @@ namespace CalendarBot
                     WildCardExpression = "*"
                 })
                 .AddSingleton<InteractionService>()
+                .AddSingleton<ILiteDatabase>(new LiteDatabase(configuration.GetConnectionString("LiteDB")))
+                .AddSingleton<ILiteCollection<CalendarEvent>>(services => {
+                    var collection = services.GetRequiredService<ILiteDatabase>().GetCollection<CalendarEvent>(BsonAutoId.Guid);
+                    collection.EnsureIndex(x => x.DateAndTime);
+                    return collection;
+                })
+                .AddSingleton<System.Timers.Timer>()
                 .BuildServiceProvider();
         }
     }
