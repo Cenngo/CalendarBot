@@ -2435,10 +2435,10 @@
         <member name="P:Discord.Rest.RestStageChannel.PrivacyLevel">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestStageChannel.DiscoverableDisabled">
+        <member name="P:Discord.Rest.RestStageChannel.IsDiscoverableDisabled">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestStageChannel.Live">
+        <member name="P:Discord.Rest.RestStageChannel.IsLive">
             <inheritdoc/>
         </member>
         <member name="M:Discord.Rest.RestStageChannel.ModifyInstanceAsync(System.Action{Discord.StageInstanceProperties},Discord.RequestOptions)">
@@ -2730,10 +2730,10 @@
                 Represents a thread channel received over REST.
             </summary>
         </member>
-        <member name="P:Discord.Rest.RestThreadChannel.Joined">
+        <member name="P:Discord.Rest.RestThreadChannel.HasJoined">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestThreadChannel.Archived">
+        <member name="P:Discord.Rest.RestThreadChannel.IsArchived">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestThreadChannel.AutoArchiveDuration">
@@ -2742,7 +2742,7 @@
         <member name="P:Discord.Rest.RestThreadChannel.ArchiveTimestamp">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestThreadChannel.Locked">
+        <member name="P:Discord.Rest.RestThreadChannel.IsLocked">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestThreadChannel.MemberCount">
@@ -3087,6 +3087,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.Rest.RestGuild.NsfwLevel">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestGuild.IsBoostProgressBarEnabled">
             <inheritdoc />
         </member>
         <member name="P:Discord.Rest.RestGuild.PreferredCulture">
@@ -4058,7 +4061,7 @@
         <member name="P:Discord.Rest.RestApplicationCommand.Description">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestApplicationCommand.DefaultPermission">
+        <member name="P:Discord.Rest.RestApplicationCommand.IsDefaultPermission">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestApplicationCommand.Options">
@@ -4103,10 +4106,10 @@
         <member name="P:Discord.Rest.RestApplicationCommandOption.Description">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestApplicationCommandOption.Default">
+        <member name="P:Discord.Rest.RestApplicationCommandOption.IsDefault">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Rest.RestApplicationCommandOption.Required">
+        <member name="P:Discord.Rest.RestApplicationCommandOption.IsRequired">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestApplicationCommandOption.Choices">
@@ -4431,11 +4434,6 @@
         <member name="P:Discord.Rest.RestMessage.MentionedRoleIds">
             <inheritdoc />
         </member>
-        <member name="P:Discord.Rest.RestMessage.MentionedUsers">
-            <summary>
-                Gets a collection of the mentioned users in the message.
-            </summary>
-        </member>
         <member name="P:Discord.Rest.RestMessage.Tags">
             <inheritdoc />
         </member>
@@ -4454,6 +4452,11 @@
         <member name="P:Discord.Rest.RestMessage.Reference">
             <inheritdoc />
         </member>
+        <member name="P:Discord.Rest.RestMessage.Interaction">
+            <summary>
+                Gets the interaction this message is a response to.
+            </summary>
+        </member>
         <member name="P:Discord.Rest.RestMessage.Flags">
             <inheritdoc />
         </member>
@@ -4462,6 +4465,11 @@
         </member>
         <member name="P:Discord.Rest.RestMessage.Components">
             <inheritdoc/>
+        </member>
+        <member name="P:Discord.Rest.RestMessage.MentionedUsers">
+            <summary>
+                Gets a collection of the mentioned users in the message.
+            </summary>
         </member>
         <member name="M:Discord.Rest.RestMessage.UpdateAsync(Discord.RequestOptions)">
             <inheritdoc />
@@ -4487,6 +4495,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.Rest.RestMessage.Discord#IMessage#Components">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Rest.RestMessage.Discord#IMessage#Interaction">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestMessage.Discord#IMessage#Stickers">
@@ -4568,9 +4579,6 @@
         <member name="P:Discord.Rest.RestUserMessage.MentionedRoleIds">
             <inheritdoc />
         </member>
-        <member name="P:Discord.Rest.RestUserMessage.MentionedUsers">
-            <inheritdoc />
-        </member>
         <member name="P:Discord.Rest.RestUserMessage.Tags">
             <inheritdoc />
         </member>
@@ -4614,7 +4622,7 @@
         <member name="P:Discord.Rest.Sticker.Type">
             <inheritdoc />
         </member>
-        <member name="P:Discord.Rest.Sticker.Available">
+        <member name="P:Discord.Rest.Sticker.IsAvailable">
             <inheritdoc />
         </member>
         <member name="P:Discord.Rest.Sticker.SortOrder">
@@ -4843,6 +4851,9 @@
         </member>
         <member name="P:Discord.Rest.RestGuildUser.Nickname">
             <inheritdoc />
+        </member>
+        <member name="P:Discord.Rest.RestGuildUser.GuildAvatarId">
+            <inheritdoc/>
         </member>
         <member name="P:Discord.Rest.RestGuildUser.IsDeafened">
             <inheritdoc />
@@ -5102,6 +5113,12 @@
         <member name="P:Discord.Rest.RestWebhookUser.Discord#IGuildUser#Nickname">
             <inheritdoc />
         </member>
+        <member name="P:Discord.Rest.RestWebhookUser.Discord#IGuildUser#GuildAvatarId">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.Rest.RestWebhookUser.Discord#IGuildUser#GetGuildAvatarUrl(Discord.ImageFormat,System.UInt16)">
+            <inheritdoc />
+        </member>
         <member name="P:Discord.Rest.RestWebhookUser.Discord#IGuildUser#IsPending">
             <inheritdoc />
         </member>
@@ -5249,6 +5266,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.Attachment.Width">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.Attachment.Ephemeral">
             <inheritdoc />
         </member>
         <member name="M:Discord.Attachment.ToString">

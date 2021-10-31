@@ -171,12 +171,13 @@
                 A URL pointing to the channel's icon.
             </returns>
         </member>
-        <member name="M:Discord.CDN.GetGuildBannerUrl(System.UInt64,System.String,System.Nullable{System.UInt16})">
+        <member name="M:Discord.CDN.GetGuildBannerUrl(System.UInt64,System.String,Discord.ImageFormat,System.Nullable{System.UInt16})">
             <summary>
                 Returns a guild banner URL.
             </summary>
             <param name="guildId">The guild snowflake identifier.</param>
             <param name="bannerId">The banner image identifier.</param>
+            <param name="format">The format to return.</param>
             <param name="size">The size of the image to return in horizontal pixels. This can be any power of two between 16 and 2048 inclusive.</param>
             <returns>
                 A URL pointing to the guild's banner image.
@@ -476,6 +477,21 @@
         <member name="F:Discord.ActivityProperties.Play">
             <summary>
                 Indicates that a user can play this song.
+            </summary>
+        </member>
+        <member name="F:Discord.ActivityProperties.PARTY_PRIVACY_FRIENDS">
+            <summary>
+                Indicates that a user is playing an activity in a voice channel with friends.
+            </summary>
+        </member>
+        <member name="F:Discord.ActivityProperties.PARTY_PRIVACY_VOICE_CHANNEL">
+            <summary>
+                Indicates that a user is playing an activity in a voice channel.
+            </summary>
+        </member>
+        <member name="F:Discord.ActivityProperties.EMBEDDED">
+            <summary>
+                Indicates that a user is playing an activity in a voice channel.
             </summary>
         </member>
         <member name="T:Discord.ActivityType">
@@ -1192,6 +1208,9 @@
         </member>
         <member name="F:Discord.ChannelType.Stage">
             <summary> The channel is a stage voice channel. </summary>
+        </member>
+        <member name="F:Discord.ChannelType.GuildDirectory">
+            <summary> The channel is a guild directory used in hub servers. (Unreleased)</summary>
         </member>
         <member name="T:Discord.Direction">
             <summary>
@@ -1988,23 +2007,21 @@
         <member name="P:Discord.IStageChannel.PrivacyLevel">
             <summary>
                 The <see cref="T:Discord.StagePrivacyLevel"/> of the current stage.
+                Gets the <see cref="T:Discord.StagePrivacyLevel"/> of the current stage.
             </summary>
             <remarks>
                 If the stage isn't live then this property will be set to <see langword="null"/>.
             </remarks>
         </member>
-        <member name="P:Discord.IStageChannel.DiscoverableDisabled">
+        <member name="P:Discord.IStageChannel.IsDiscoverableDisabled">
             <summary>
-                <see langword="true"/> if stage discovery is disabled, otherwise <see langword="false"/>. 
+                Gets whether or not stage discovery is disabled. 
             </summary>
         </member>
-        <member name="P:Discord.IStageChannel.Live">
+        <member name="P:Discord.IStageChannel.IsLive">
             <summary>
-                <see langword="true"/> when the stage is live, otherwise <see langword="false"/>.
+                Gets whether or not the stage is live.
             </summary>
-            <remarks>
-                If the stage isn't live then this property will be set to <see langword="null"/>.
-            </remarks>
         </member>
         <member name="M:Discord.IStageChannel.StartStageAsync(System.String,Discord.StagePrivacyLevel,Discord.RequestOptions)">
             <summary>
@@ -2238,39 +2255,39 @@
                 Gets the type of the current thread channel.
             </summary>
         </member>
-        <member name="P:Discord.IThreadChannel.Joined">
+        <member name="P:Discord.IThreadChannel.HasJoined">
             <summary>
-                <see langword="true"/> if the current user has joined this thread, otherwise <see langword="false"/>.
+                Gets whether or not the current user has joined this thread.
             </summary>
         </member>
-        <member name="P:Discord.IThreadChannel.Archived">
+        <member name="P:Discord.IThreadChannel.IsArchived">
             <summary>
                 <see langword="true"/> if the current thread is archived, otherwise <see langword="false"/>.
             </summary>
         </member>
         <member name="P:Discord.IThreadChannel.AutoArchiveDuration">
             <summary>
-                Duration to automatically archive the thread after recent activity.
+                Gets whether or not the current thread is archived.
             </summary>
         </member>
         <member name="P:Discord.IThreadChannel.ArchiveTimestamp">
             <summary>
-                Timestamp when the thread's archive status was last changed, used for calculating recent activity.
+                Gets the timestamp when the thread's archive status was last changed, used for calculating recent activity.
             </summary>
         </member>
-        <member name="P:Discord.IThreadChannel.Locked">
+        <member name="P:Discord.IThreadChannel.IsLocked">
             <summary>
-                <see langword="true"/> if the current thread is locked, otherwise <see langword="false"/>
+                Gets whether or not the current thread is locked.
             </summary>
         </member>
         <member name="P:Discord.IThreadChannel.MemberCount">
             <summary>
-                An approximate count of users in a thread, stops counting at 50.
+                Gets an approximate count of users in a thread, stops counting after 50.
             </summary>
         </member>
         <member name="P:Discord.IThreadChannel.MessageCount">
             <summary>
-                An approximate count of messages in a thread, stops counting at 50.
+                Gets an approximate count of messages in a thread, stops counting after 50.
             </summary>
         </member>
         <member name="M:Discord.IThreadChannel.JoinAsync(Discord.RequestOptions)">
@@ -2279,7 +2296,7 @@
             </summary>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous join operation. 
+                A task that represents the asynchronous join operation.
             </returns>
         </member>
         <member name="M:Discord.IThreadChannel.LeaveAsync(Discord.RequestOptions)">
@@ -2288,7 +2305,7 @@
             </summary>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous leave operation. 
+                A task that represents the asynchronous leave operation.
             </returns>
         </member>
         <member name="M:Discord.IThreadChannel.AddUserAsync(Discord.IGuildUser,Discord.RequestOptions)">
@@ -2298,7 +2315,7 @@
             <param name="user">The <see cref="T:Discord.IGuildUser"/> to add.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous operation of adding a member to a thread. 
+                A task that represents the asynchronous operation of adding a member to a thread.
             </returns>
         </member>
         <member name="M:Discord.IThreadChannel.RemoveUserAsync(Discord.IGuildUser,Discord.RequestOptions)">
@@ -2308,7 +2325,7 @@
             <param name="user">The <see cref="T:Discord.IGuildUser"/> to remove from this thread.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous operation of removing a user from this thread. 
+                A task that represents the asynchronous operation of removing a user from this thread.
             </returns>
         </member>
         <member name="T:Discord.IVoiceChannel">
@@ -2386,6 +2403,21 @@
                 Gets or sets the privacy level of the stage.
             </summary>
         </member>
+        <member name="T:Discord.StagePrivacyLevel">
+            <summary>
+                Specifies the privacy levels of a Stage instance.
+            </summary>
+        </member>
+        <member name="F:Discord.StagePrivacyLevel.Public">
+            <summary>
+                The Stage instance is visible publicly, such as on Stage Discovery.
+            </summary>
+        </member>
+        <member name="F:Discord.StagePrivacyLevel.GuildOnly">
+            <summary>
+                The Stage instance is visible to only guild members.
+            </summary>
+        </member>
         <member name="T:Discord.TextChannelProperties">
             <summary>
                 Provides properties that are used to modify an <see cref="T:Discord.ITextChannel"/> with the specified changes.
@@ -2459,7 +2491,7 @@
             <summary>
                 Three days (4320 minutes).
                 <remarks>
-                    This option is explicity avaliable to nitro users.
+                    This option is explicitly available to nitro users.
                 </remarks>
             </summary>
         </member>
@@ -2467,7 +2499,7 @@
             <summary>
                 One week (10080 minutes).
                 <remarks>
-                    This option is explicity avaliable to nitro users.
+                    This option is explicitly available to nitro users.
                 </remarks>
             </summary>
         </member>
@@ -2884,8 +2916,9 @@
                 given that the <see cref="P:Discord.GuildProperties.SystemChannelId"/> has also been set.
                 A value of <see cref="F:Discord.SystemChannelMessageDeny.GuildBoost"/> will deny guild boost messages from being sent, and allow all
                 other types of messages.
-                Refer to the extension methods <see cref="M:Discord.GuildExtensions.GetGuildBoostMessagesEnabled(Discord.IGuild)"/> and
-                <see cref="M:Discord.GuildExtensions.GetWelcomeMessagesEnabled(Discord.IGuild)"/> to check if these system channel message types
+                Refer to the extension methods <see cref="M:Discord.GuildExtensions.GetGuildBoostMessagesEnabled(Discord.IGuild)"/>,  
+                <see cref="M:Discord.GuildExtensions.GetWelcomeMessagesEnabled(Discord.IGuild)"/>, <see cref="M:Discord.GuildExtensions.GetGuildSetupTipMessagesEnabled(Discord.IGuild)"/>,
+                and <see cref="M:Discord.GuildExtensions.GetGuildWelcomeMessageReplyEnabled(Discord.IGuild)"/> to check if these system channel message types
                 are enabled, without the need to manipulate the logic of the flag.
             </remarks>
         </member>
@@ -2908,6 +2941,11 @@
                 over this property. When <see cref="P:Discord.GuildProperties.PreferredLocale"/> is set,
                 the value of <see cref="P:Discord.GuildProperties.PreferredCulture"/> will be unused.
             </remarks>
+        </member>
+        <member name="P:Discord.GuildProperties.IsBoostProgressBarEnabled">
+            <summary>
+                Gets or sets if the boost progress bar is enabled.
+            </summary>
         </member>
         <member name="T:Discord.GuildWidgetProperties">
             <summary>
@@ -3321,6 +3359,14 @@
                 The preferred culture information of this guild.
             </returns>
         </member>
+        <member name="P:Discord.IGuild.IsBoostProgressBarEnabled">
+            <summary>
+                Gets whether the guild has the boost progress bar enabled.
+            </summary>
+            <returns>
+                <see langword="true"/> if the boost progress bar is enabled; otherwise <see langword="false"/>.
+            </returns>
+        </member>
         <member name="M:Discord.IGuild.ModifyAsync(System.Action{Discord.GuildProperties},Discord.RequestOptions)">
             <summary>
                 Modifies this guild.
@@ -3537,7 +3583,7 @@
         </member>
         <member name="M:Discord.IGuild.GetStageChannelAsync(System.UInt64,Discord.CacheMode,Discord.RequestOptions)">
             <summary>
-                Gets a stage channel in this guild
+                Gets a stage channel in this guild.
             </summary>
             <param name="id">The snowflake identifier for the stage channel.</param>
             <param name="mode">The <see cref="T:Discord.CacheMode"/> that determines whether the object should be fetched from cache.</param>
@@ -3782,7 +3828,7 @@
         </member>
         <member name="M:Discord.IGuild.DisconnectAsync(Discord.IGuildUser)">
             <summary>
-            Disconnects the user from its current voice channel
+                Disconnects the user from its current voice channel.
             </summary>
             <param name="user">The user to disconnect.</param>
             <returns>A task that represents the asynchronous operation for disconnecting a user.</returns>
@@ -4009,7 +4055,7 @@
         </member>
         <member name="M:Discord.IGuild.CreateStickerAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.String,Discord.RequestOptions)">
             <summary>
-                Creates a new sticker in this guild
+                Creates a new sticker in this guild.
             </summary>
             <param name="name">The name of the sticker.</param>
             <param name="description">The description of the sticker.</param>
@@ -4022,7 +4068,7 @@
         </member>
         <member name="M:Discord.IGuild.CreateStickerAsync(System.String,System.String,System.Collections.Generic.IEnumerable{System.String},System.IO.Stream,System.String,Discord.RequestOptions)">
             <summary>
-                Creates a new sticker in this guild
+                Creates a new sticker in this guild.
             </summary>
             <param name="name">The name of the sticker.</param>
             <param name="description">The description of the sticker.</param>
@@ -4348,6 +4394,16 @@
                 Deny the messages that are sent when a user boosts the guild.
             </summary>
         </member>
+        <member name="F:Discord.SystemChannelMessageDeny.GuildSetupTip">
+            <summary>
+                Deny the messages that are related to guild setup.
+            </summary>
+        </member>
+        <member name="F:Discord.SystemChannelMessageDeny.WelcomeMessageReply">
+            <summary>
+                Deny the reply with sticker button on welcome messages.
+            </summary>
+        </member>
         <member name="T:Discord.VerificationLevel">
             <summary>
                 Specifies the verification level the guild uses.
@@ -4634,7 +4690,7 @@
         </member>
         <member name="F:Discord.ApplicationCommandOptionType.User">
             <summary>
-                A <see cref="T:Discord.IGuildUser"/>.
+                A <see cref="T:Discord.IUser"/>.
             </summary>
         </member>
         <member name="F:Discord.ApplicationCommandOptionType.Channel">
@@ -4760,18 +4816,18 @@
             </summary>
         </member>
         <member name="F:Discord.MessageCommandBuilder.MaxNameLength">
-            <summary> 
+            <summary>
                 Returns the maximum length a commands name allowed by Discord
             </summary>
         </member>
         <member name="P:Discord.MessageCommandBuilder.Name">
             <summary>
-                The name of this Message command.
+                Gets or sets the name of this Message command.
             </summary>
         </member>
-        <member name="P:Discord.MessageCommandBuilder.DefaultPermission">
+        <member name="P:Discord.MessageCommandBuilder.IsDefaultPermission">
             <summary>
-                Whether the command is enabled by default when the app is added to a guild
+                Gets or sets whether the command is enabled by default when the app is added to a guild
             </summary>
         </member>
         <member name="M:Discord.MessageCommandBuilder.Build">
@@ -4795,7 +4851,7 @@
             <summary>
                 Sets the default permission of the current command.
             </summary>
-            <param name="value">The default permission value to set.</param>
+            <param name="isDefaultPermission">The default permission value to set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="T:Discord.MessageCommandProperties">
@@ -4810,17 +4866,17 @@
         </member>
         <member name="F:Discord.UserCommandBuilder.MaxNameLength">
             <summary> 
-                Returns the maximum length a commands name allowed by Discord
+                Returns the maximum length a commands name allowed by Discord.
             </summary>
         </member>
         <member name="P:Discord.UserCommandBuilder.Name">
             <summary>
-                The name of this User command.
+                Gets or sets the name of this User command.
             </summary>
         </member>
-        <member name="P:Discord.UserCommandBuilder.DefaultPermission">
+        <member name="P:Discord.UserCommandBuilder.IsDefaultPermission">
             <summary>
-                Whether the command is enabled by default when the app is added to a guild
+                Gets or sets whether the command is enabled by default when the app is added to a guild.
             </summary>
         </member>
         <member name="M:Discord.UserCommandBuilder.Build">
@@ -4842,7 +4898,7 @@
             <summary>
                 Sets the default permission of the current command.
             </summary>
-            <param name="value">The default permission value to set.</param>
+            <param name="isDefaultPermission">The default permission value to set.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="T:Discord.UserCommandProperties">
@@ -4862,7 +4918,7 @@
         </member>
         <member name="P:Discord.IApplicationCommand.Type">
             <summary>
-                The type of the command
+                The type of the command.
             </summary>
         </member>
         <member name="P:Discord.IApplicationCommand.Name">
@@ -4875,7 +4931,7 @@
                 The description of the command.
             </summary>
         </member>
-        <member name="P:Discord.IApplicationCommand.DefaultPermission">
+        <member name="P:Discord.IApplicationCommand.IsDefaultPermission">
             <summary>
                 Whether the command is enabled by default when the app is added to a guild.
             </summary>
@@ -4974,12 +5030,12 @@
                 The description of this command option, 1-100 character description.
             </summary>
         </member>
-        <member name="P:Discord.IApplicationCommandOption.Default">
+        <member name="P:Discord.IApplicationCommandOption.IsDefault">
             <summary>
                 The first required option for the user to complete--only one option can be default.
             </summary>
         </member>
-        <member name="P:Discord.IApplicationCommandOption.Required">
+        <member name="P:Discord.IApplicationCommandOption.IsRequired">
             <summary>
                 If the parameter is required or optional, default is <see langword="false"/>.
             </summary>
@@ -5102,7 +5158,7 @@
         </member>
         <member name="T:Discord.IDiscordInteractionData">
             <summary>
-                Represents an interface used to specify classes that they are a vaild data type of a <see cref="T:Discord.IDiscordInteraction"/> class.
+                Represents an interface used to specify classes that they are a valid data type of a <see cref="T:Discord.IDiscordInteraction"/> class.
             </summary>
         </member>
         <member name="T:Discord.InteractionResponseType">
@@ -5113,7 +5169,7 @@
                 After receiving an interaction, you must respond to acknowledge it. You can choose to respond with a message immediately using <see cref="F:Discord.InteractionResponseType.ChannelMessageWithSource"/>
                 or you can choose to send a deferred response with <see cref="F:Discord.InteractionResponseType.DeferredChannelMessageWithSource"/>. If choosing a deferred response, the user will see a loading state for the interaction,
                 and you'll have up to 15 minutes to edit the original deferred response using Edit Original Interaction Response.
-                You can read more about Response types <see href="https://discord.com/developers/docs/interactions/slash-commands#interaction-response">Here</see>
+                You can read more about Response types <see href="https://discord.com/developers/docs/interactions/slash-commands#interaction-response">Here</see>.
             </remarks>
         </member>
         <member name="F:Discord.InteractionResponseType.Pong">
@@ -5143,17 +5199,17 @@
         </member>
         <member name="F:Discord.InteractionResponseType.DeferredUpdateMessage">
             <summary>
-                For components: ACK an interaction and edit the original message later; the user does not see a loading state
+                For components: ACK an interaction and edit the original message later; the user does not see a loading state.
             </summary>
         </member>
         <member name="F:Discord.InteractionResponseType.UpdateMessage">
             <summary>
-                For components: edit the message the component was attached to
+                For components: edit the message the component was attached to.
             </summary>
         </member>
         <member name="F:Discord.InteractionResponseType.ApplicationCommandAutocompleteResult">
             <summary>
-                Respond with a set of choices to a autocomplete interaction
+                Respond with a set of choices to a autocomplete interaction.
             </summary>
         </member>
         <member name="T:Discord.InteractionType">
@@ -5183,7 +5239,7 @@
         </member>
         <member name="T:Discord.ActionRowComponent">
             <summary>
-                Represents a <see cref="T:Discord.IMessageComponent"/> Row for child components to live in. 
+                Represents a <see cref="T:Discord.IMessageComponent"/> Row for child components to live in.
             </summary>
         </member>
         <member name="P:Discord.ActionRowComponent.Type">
@@ -5191,7 +5247,7 @@
         </member>
         <member name="P:Discord.ActionRowComponent.Components">
             <summary>
-                The child components in this row.
+                Gets the child components in this row.
             </summary>
         </member>
         <member name="T:Discord.ButtonComponent">
@@ -5204,35 +5260,33 @@
         </member>
         <member name="P:Discord.ButtonComponent.Style">
             <summary>
-                The <see cref="T:Discord.ButtonStyle"/> of this button, example buttons with each style can be found <see href="https://discord.com/assets/7bb017ce52cfd6575e21c058feb3883b.png">Here</see>.
+                Gets the <see cref="T:Discord.ButtonStyle"/> of this button, example buttons with each style can be found <see href="https://discord.com/assets/7bb017ce52cfd6575e21c058feb3883b.png">Here</see>.
             </summary>
         </member>
         <member name="P:Discord.ButtonComponent.Label">
             <summary>
-                The label of the button, this is the text that is shown.
+                Gets the label of the button, this is the text that is shown.
             </summary>
         </member>
         <member name="P:Discord.ButtonComponent.Emote">
             <summary>
-                A <see cref="T:Discord.IEmote"/> that will be displayed with this button.
+                Gets the <see cref="T:Discord.IEmote"/> displayed with this button.
             </summary>
         </member>
         <member name="P:Discord.ButtonComponent.CustomId">
-            <summary>
-                A unique id that will be sent with a <see cref="T:Discord.IDiscordInteraction"/>. This is how you know what button was pressed.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:Discord.ButtonComponent.Url">
             <summary>
-                A URL for a <see cref="F:Discord.ButtonStyle.Link"/> button. 
+                Gets the URL for a <see cref="F:Discord.ButtonStyle.Link"/> button.
             </summary>
             <remarks>
                 You cannot have a button with a <b>URL</b> and a <b>CustomId</b>.
             </remarks>
         </member>
-        <member name="P:Discord.ButtonComponent.Disabled">
+        <member name="P:Discord.ButtonComponent.IsDisabled">
             <summary>
-                Whether this button is disabled or not.
+                Gets whether this button is disabled or not.
             </summary>
         </member>
         <member name="M:Discord.ButtonComponent.ToBuilder">
@@ -5309,12 +5363,11 @@
             <param name="components">The components to create the builder from.</param>
             <returns>The newly created builder.</returns>
         </member>
-        <member name="M:Discord.ComponentBuilder.WithSelectMenu(System.String,System.String,System.Collections.Generic.List{Discord.SelectMenuOptionBuilder},System.String,System.Int32,System.Int32,System.Boolean,System.Int32)">
+        <member name="M:Discord.ComponentBuilder.WithSelectMenu(System.String,System.Collections.Generic.List{Discord.SelectMenuOptionBuilder},System.String,System.Int32,System.Int32,System.Boolean,System.Int32)">
             <summary>
                 Adds a <see cref="T:Discord.SelectMenuBuilder"/> to the <see cref="T:Discord.ComponentBuilder"/> at the specific row.
                 If the row cannot accept the component then it will add it to a row that can.
             </summary>
-            <param name="label">The label of the menu.</param>
             <param name="customId">The custom id of the menu.</param>
             <param name="options">The options of the menu.</param>
             <param name="placeholder">The placeholder of the menu.</param>
@@ -5444,7 +5497,7 @@
                 Gets or sets the url of the current button.
             </summary>
         </member>
-        <member name="P:Discord.ButtonBuilder.Disabled">
+        <member name="P:Discord.ButtonBuilder.IsDisabled">
             <summary>
                 Gets or sets whether the current button is disabled.
             </summary>
@@ -5463,7 +5516,7 @@
             <param name="customId">The custom ID of this button.</param>
             <param name="style">The custom ID of this button.</param>
             <param name="emote">The emote of this button.</param>
-            <param name="disabled">Disabled this button or not.</param>
+            <param name="isDisabled">Disabled this button or not.</param>
         </member>
         <member name="M:Discord.ButtonBuilder.#ctor(Discord.ButtonComponent)">
             <summary>
@@ -5556,7 +5609,7 @@
             <summary>
                 Sets whether the current button is disabled.
             </summary>
-            <param name="disabled">Whether the current button is disabled or not.</param>
+            <param name="isDisabled">Whether the current button is disabled or not.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.ButtonBuilder.Build">
@@ -5623,7 +5676,7 @@
             <exception cref="T:System.ArgumentException" accessor="set"><see cref="P:Discord.SelectMenuBuilder.Options"/> count exceeds <see cref="F:Discord.SelectMenuBuilder.MaxOptionCount"/>.</exception>
             <exception cref="T:System.ArgumentNullException" accessor="set"><see cref="P:Discord.SelectMenuBuilder.Options"/> is null.</exception>
         </member>
-        <member name="P:Discord.SelectMenuBuilder.Disabled">
+        <member name="P:Discord.SelectMenuBuilder.IsDisabled">
             <summary>
                 Gets or sets whether the current menu is disabled.
             </summary>
@@ -5647,7 +5700,7 @@
             <param name="placeholder">The placeholder of this select menu.</param>
             <param name="maxValues">The max values of this select menu.</param>
             <param name="minValues">The min values of this select menu.</param>
-            <param name="disabled">Disabled this select menu or not.</param>
+            <param name="isDisabled">Disabled this select menu or not.</param>
         </member>
         <member name="M:Discord.SelectMenuBuilder.WithCustomId(System.String)">
             <summary>
@@ -5717,7 +5770,7 @@
             <param name="value">The value of this option.</param>
             <param name="description">The description of this option.</param>
             <param name="emote">The emote of this option.</param>
-            <param name="default">Render this option as selected by default or not.</param>
+            <param name="isDefault">Render this option as selected by default or not.</param>
             <exception cref="T:System.InvalidOperationException">Options count reached <see cref="F:Discord.SelectMenuBuilder.MaxOptionCount"/>.</exception>
             <returns>
                 The current builder.
@@ -5727,7 +5780,7 @@
             <summary>
                 Sets whether the current menu is disabled.
             </summary>
-            <param name="disabled">Whether the current menu is disabled or not.</param>
+            <param name="isDisabled">Whether the current menu is disabled or not.</param>
             <returns>
                 The current builder.
             </returns>
@@ -5767,7 +5820,7 @@
         </member>
         <member name="P:Discord.SelectMenuOptionBuilder.Value">
             <summary>
-                Gets or sets the custom id of the current select menu.
+                Gets or sets the value of the current select menu.
             </summary>
             <exception cref="T:System.ArgumentException" accessor="set"><see cref="P:Discord.SelectMenuOptionBuilder.Value"/> length exceeds <see cref="F:Discord.SelectMenuOptionBuilder.MaxSelectValueLength"/>.</exception>
             <exception cref="T:System.ArgumentException" accessor="set"><see cref="P:Discord.SelectMenuOptionBuilder.Value"/> length subceeds 1.</exception>
@@ -5784,7 +5837,7 @@
                 Gets or sets the emote of this option.
             </summary>
         </member>
-        <member name="P:Discord.SelectMenuOptionBuilder.Default">
+        <member name="P:Discord.SelectMenuOptionBuilder.IsDefault">
             <summary>
                 Gets or sets the whether or not this option will render selected by default.
             </summary>
@@ -5802,7 +5855,7 @@
             <param name="value">The value of this option.</param>
             <param name="description">The description of this option.</param>
             <param name="emote">The emote of this option.</param>
-            <param name="default">Render this option as selected by default or not.</param>
+            <param name="isDefault">Render this option as selected by default or not.</param>
         </member>
         <member name="M:Discord.SelectMenuOptionBuilder.#ctor(Discord.SelectMenuOption)">
             <summary>
@@ -5852,7 +5905,7 @@
             <summary>
                 Sets the field default.
             </summary>
-            <param name="defaultValue">The value to set the field default to.</param>
+            <param name="isDefault">The value to set the field default to.</param>
             <returns>
                 The current builder.
             </returns>
@@ -5865,22 +5918,22 @@
         </member>
         <member name="T:Discord.ComponentType">
             <summary>
-                Represents a type of a component
+                Represents a type of a component.
             </summary>
         </member>
         <member name="F:Discord.ComponentType.ActionRow">
             <summary>
-                A container for other components
+                A container for other components.
             </summary>
         </member>
         <member name="F:Discord.ComponentType.Button">
             <summary>
-                A clickable button
+                A clickable button.
             </summary>
         </member>
         <member name="F:Discord.ComponentType.SelectMenu">
             <summary>
-                A select menu for picking from choices
+                A select menu for picking from choices.
             </summary>
         </member>
         <member name="T:Discord.IMessageComponent">
@@ -5905,7 +5958,7 @@
         </member>
         <member name="P:Discord.MessageComponent.Components">
             <summary>
-                The components to be used in a message.
+                Gets the components to be used in a message.
             </summary>
         </member>
         <member name="P:Discord.MessageComponent.Empty">
@@ -5922,33 +5975,31 @@
             <inheritdoc/>
         </member>
         <member name="P:Discord.SelectMenuComponent.CustomId">
-            <summary>
-                The custom id of this Select menu that will be sent with a <see cref="T:Discord.IDiscordInteraction"/>.
-            </summary>
+            <inheritdoc/>
         </member>
         <member name="P:Discord.SelectMenuComponent.Options">
             <summary>
-                The menus options to select from.
+                Gets the menus options to select from.
             </summary>
         </member>
         <member name="P:Discord.SelectMenuComponent.Placeholder">
             <summary>
-                A custom placeholder text if nothing is selected, max 100 characters.
+                Gets the custom placeholder text if nothing is selected.
             </summary>
         </member>
         <member name="P:Discord.SelectMenuComponent.MinValues">
             <summary>
-                The minimum number of items that must be chosen; default 1, min 0, max 25
+                Gets the minimum number of items that must be chosen.
             </summary>
         </member>
         <member name="P:Discord.SelectMenuComponent.MaxValues">
             <summary>
-                The maximum number of items that can be chosen; default 1, max 25
+                Gets the maximum number of items that can be chosen.
             </summary>
         </member>
-        <member name="P:Discord.SelectMenuComponent.Disabled">
+        <member name="P:Discord.SelectMenuComponent.IsDisabled">
             <summary>
-                Whether this menu is disabled or not.
+                Gets whether this menu is disabled or not.
             </summary>
         </member>
         <member name="M:Discord.SelectMenuComponent.ToBuilder">
@@ -6068,7 +6119,7 @@
             <param name="description">The description of this option.</param>
             <param name="required">If this option is required for this command.</param>
             <param name="isDefault">If this option is the default option.</param>
-            <param name="isAutocomplete">If this option is set to autocompleate.</param>
+            <param name="isAutocomplete">If this option is set to autocomplete.</param>
             <param name="options">The options of the option to add.</param>
             <param name="channelTypes">The allowed channel types for this option.</param>
             <param name="choices">The choices of this option.</param>
@@ -6203,7 +6254,7 @@
         </member>
         <member name="M:Discord.SlashCommandOptionBuilder.AddChannelType(Discord.ChannelType)">
             <summary>
-                Adds a channnel type to the current option.
+                Adds a channel type to the current option.
             </summary>
             <param name="channelType">The <see cref="T:Discord.ChannelType"/> to add.</param>
             <returns>The current builder.</returns>
@@ -7473,6 +7524,14 @@
                 The width of this attachment if it is a picture; otherwise <c>null</c>.
             </returns>
         </member>
+        <member name="P:Discord.IAttachment.Ephemeral">
+            <summary>
+                Gets whether or not this attachment is ephemeral.
+            </summary>
+            <returns>
+                <see langword="true"/> if the attachment is ephemeral; otherwise <see langword="false"/>.
+            </returns>
+        </member>
         <member name="T:Discord.IEmbed">
             <summary>
                 Represents a Discord embed object.
@@ -7791,6 +7850,14 @@
                 A message's flags, if any is associated.
             </returns>
         </member>
+        <member name="P:Discord.IMessage.Interaction">
+            <summary>
+                Gets the interaction this message is a response to.
+            </summary>
+            <returns>
+                A <see cref="T:Discord.IMessageInteraction"/> if the message is a response to an interaction; otherwise <see langword="null"/>.
+            </returns>
+        </member>
         <member name="M:Discord.IMessage.AddReactionAsync(Discord.IEmote,Discord.RequestOptions)">
             <summary>
                 Adds a reaction to this message.
@@ -7897,6 +7964,31 @@
             <returns>
                  Paged collection of users.
             </returns>
+        </member>
+        <member name="T:Discord.IMessageInteraction">
+            <summary>
+                Represents a partial <see cref="T:Discord.IDiscordInteraction"/> within a message.
+            </summary>
+        </member>
+        <member name="P:Discord.IMessageInteraction.Id">
+            <summary>
+                Gets the snowflake id of the interaction.
+            </summary>
+        </member>
+        <member name="P:Discord.IMessageInteraction.Type">
+            <summary>
+                Gets the type of the interaction.
+            </summary>
+        </member>
+        <member name="P:Discord.IMessageInteraction.Name">
+            <summary>
+                Gets the name of the application command used.
+            </summary>
+        </member>
+        <member name="P:Discord.IMessageInteraction.User">
+            <summary>
+                Gets the <seealso cref="T:Discord.IUser"/> who invoked the interaction.
+            </summary>
         </member>
         <member name="T:Discord.IReaction">
             <summary>
@@ -8087,6 +8179,32 @@
         <member name="F:Discord.MessageFlags.Loading">
             <summary>
                 Flag given to messages that is an Interaction Response and the bot is "thinking"
+            </summary>
+        </member>
+        <member name="T:Discord.MessageInteraction`1">
+            <summary>
+                Represents a partial <see cref="T:Discord.IDiscordInteraction"/> within a message.
+            </summary>
+            <typeparam name="TUser">The type of the user.</typeparam>
+        </member>
+        <member name="P:Discord.MessageInteraction`1.Id">
+            <summary>
+                Gets the snowflake id of the interaction.
+            </summary>
+        </member>
+        <member name="P:Discord.MessageInteraction`1.Type">
+            <summary>
+                Gets the type of the interaction.
+            </summary>
+        </member>
+        <member name="P:Discord.MessageInteraction`1.Name">
+            <summary>
+                Gets the name of the application command used.
+            </summary>
+        </member>
+        <member name="P:Discord.MessageInteraction`1.User">
+            <summary>
+                Gets the <typeparamref name="TUser"/> who invoked the interaction.
             </summary>
         </member>
         <member name="T:Discord.MessageProperties">
@@ -8301,15 +8419,15 @@
                 The message is an inline reply.
             </summary>
             <remarks>
-                Only available in API v8
+                Only available in API v8.
             </remarks>
         </member>
         <member name="F:Discord.MessageType.ApplicationCommand">
             <summary>
-                The message is an Application Command
+                The message is an Application Command.
             </summary>
             <remarks>
-                Only available in API v8
+                Only available in API v8.
             </remarks>
         </member>
         <member name="F:Discord.MessageType.ThreadStarterMessage">
@@ -8317,12 +8435,17 @@
                 The message that starts a thread.
             </summary>
             <remarks>
-                Only available in API v9
+                Only available in API v9.
             </remarks>
         </member>
         <member name="F:Discord.MessageType.GuildInviteReminder">
             <summary>
-                The message for a invite reminder
+                The message for a invite reminder.
+            </summary>
+        </member>
+        <member name="F:Discord.MessageType.ContextMenuCommand">
+            <summary>
+                The message for a context menu command.
             </summary>
         </member>
         <member name="T:Discord.ReactionMetadata">
@@ -8347,19 +8470,29 @@
             </returns>
         </member>
         <member name="T:Discord.StickerFormatType">
-            <summary> Defines the types of formats for stickers. </summary>
+            <summary>
+                Defines the types of formats for stickers.
+            </summary>
         </member>
         <member name="F:Discord.StickerFormatType.None">
-            <summary> Default value for a sticker format type. </summary>
+            <summary>
+                Default value for a sticker format type.
+            </summary>
         </member>
         <member name="F:Discord.StickerFormatType.Png">
-            <summary> The sticker format type is png. </summary>
+            <summary>
+                The sticker format type is png.
+            </summary>
         </member>
         <member name="F:Discord.StickerFormatType.Apng">
-            <summary> The sticker format type is apng. </summary>
+            <summary>
+                The sticker format type is apng.
+            </summary>
         </member>
         <member name="F:Discord.StickerFormatType.Lottie">
-            <summary> The sticker format type is lottie. </summary>
+            <summary>
+                The sticker format type is lottie.
+            </summary>
         </member>
         <member name="T:Discord.TagHandling">
             <summary>
@@ -8446,7 +8579,7 @@
                     If the <see cref="P:Discord.TimestampTag.Time"/> is null then the default 0 will be used.
                 </para>
             </summary>
-            <returns>A string thats compatible in a discord message, ex: <code>&lt;t:1625944201:f&gt;</code></returns>
+            <returns>A string that is compatible in a discord message, ex: <code>&lt;t:1625944201:f&gt;</code></returns>
         </member>
         <member name="M:Discord.TimestampTag.FromDateTime(System.DateTime,Discord.TimestampTagStyles)">
             <summary>
@@ -9845,6 +9978,11 @@
                 This value may not be set if the role is an @everyone role.
             </remarks>
         </member>
+        <member name="P:Discord.RoleProperties.Icon">
+            <summary>
+                Gets or sets the icon of the role.
+            </summary>
+        </member>
         <member name="P:Discord.RoleProperties.Mentionable">
             <summary>
                 Gets or sets whether or not this role can be mentioned.
@@ -9996,14 +10134,14 @@
                 A <see cref="T:Discord.StickerFormatType"/> with the format type of this sticker.
             </returns>
         </member>
-        <member name="P:Discord.ISticker.Available">
+        <member name="P:Discord.ISticker.IsAvailable">
             <summary>
-                Gets whether this guild sticker can be used, may be false due to loss of Server Boosts
+                Gets whether this guild sticker can be used, may be false due to loss of Server Boosts.
             </summary>
         </member>
         <member name="P:Discord.ISticker.SortOrder">
             <summary>
-                Gets the standard sticker's sort order within its pack
+                Gets the standard sticker's sort order within its pack.
             </summary>
         </member>
         <member name="M:Discord.ISticker.GetStickerUrl">
@@ -10035,7 +10173,7 @@
             <summary>
                 Represents a discord sticker pack.
             </summary>
-            <typeparam name="TSticker">The type of the stickers within the collection</typeparam>
+            <typeparam name="TSticker">The type of the stickers within the collection.</typeparam>
         </member>
         <member name="P:Discord.StickerPack`1.Id">
             <summary>
@@ -10094,7 +10232,7 @@
         </member>
         <member name="T:Discord.StickerType">
             <summary>
-                Represents a type of sticker
+                Represents a type of sticker..
             </summary>
         </member>
         <member name="F:Discord.StickerType.Standard">
@@ -10376,6 +10514,14 @@
                 A string representing the nickname of the user; <c>null</c> if none is set.
             </returns>
         </member>
+        <member name="P:Discord.IGuildUser.GuildAvatarId">
+            <summary>
+                Gets the guild specific avatar for this users.
+            </summary>
+            <returns>
+                The users guild avatar hash if they have one; otherwise <see langword="null"/>.
+            </returns>
+        </member>
         <member name="P:Discord.IGuildUser.GuildPermissions">
             <summary>
                 Gets the guild-level permissions for this user.
@@ -10449,6 +10595,21 @@
             <returns>
                 A <see cref="T:Discord.ChannelPermissions"/> structure representing the permissions that a user has in the
                 specified channel.
+            </returns>
+        </member>
+        <member name="M:Discord.IGuildUser.GetGuildAvatarUrl(Discord.ImageFormat,System.UInt16)">
+            <summary>
+                Gets the guild avatar URL for this user.
+            </summary>
+            <remarks>
+                This property retrieves a URL for this guild user's guild specific avatar. In event that the user does not have a valid guild avatar
+                (i.e. their avatar identifier is not set), this method will return <c>null</c>.
+            </remarks>
+            <param name="format">The format to return.</param>
+            <param name="size">The size of the image to return in. This can be any power of two between 16 and 2048.
+            </param>
+            <returns>
+                A string representing the user's avatar URL; <c>null</c> if the user does not have an avatar in place.
             </returns>
         </member>
         <member name="M:Discord.IGuildUser.KickAsync(System.String,Discord.RequestOptions)">
@@ -10647,19 +10808,6 @@
                 Gets the identifier of this user's avatar.
             </summary>
         </member>
-        <member name="P:Discord.IUser.BannerId">
-            <summary>
-                Gets the identifier of this user's banner.
-            </summary>
-        </member>
-        <member name="P:Discord.IUser.AccentColor">
-            <summary>
-                Gets the user's banner color.
-            </summary>
-            <returns>
-                A <see cref="T:Discord.Color"/> struct representing the accent color of this user's banner.
-            </returns>
-        </member>
         <member name="M:Discord.IUser.GetAvatarUrl(Discord.ImageFormat,System.UInt16)">
             <summary>
                 Gets the avatar URL for this user.
@@ -10682,17 +10830,6 @@
             </param>
             <returns>
                 A string representing the user's avatar URL; <c>null</c> if the user does not have an avatar in place.
-            </returns>
-        </member>
-        <member name="M:Discord.IUser.GetBannerUrl(Discord.ImageFormat,System.UInt16)">
-            <summary>
-                Gets the banner URL for this user.
-            </summary>
-            <param name="format">The format to return.</param>
-            <param name="size">The size of the image to return in. This can be any power of two between 16 and 2048.
-            </param>
-            <returns>
-                A string representing the user's avatar URL; <c>null</c> if the user does not have an banner in place.
             </returns>
         </member>
         <member name="M:Discord.IUser.GetDefaultAvatarUrl">
@@ -10972,6 +11109,11 @@
                 Flag given to users that are discord certified moderators who has give discord's exam.
             </summary>
         </member>
+        <member name="F:Discord.UserProperties.BotHTTPInteractions">
+            <summary>
+                Flag given to bots that use only outgoing webhooks, exclusively.
+            </summary>
+        </member>
         <member name="T:Discord.UserStatus">
             <summary>
                 Defines the available Discord user status.
@@ -11208,6 +11350,20 @@
             </summary>
             <param name="guild"> The guild to check. </param>
             <returns> A <c>bool</c> indicating if the guild boost messages are enabled in the system channel. </returns>
+        </member>
+        <member name="M:Discord.GuildExtensions.GetGuildSetupTipMessagesEnabled(Discord.IGuild)">
+            <summary>
+                Gets if guild setup system messages are enabled.
+            </summary>
+            <param name="guild"> The guild to check. </param>
+            <returns> A <c>bool</c> indicating if the guild setup messages are enabled in the system channel. </returns>
+        </member>
+        <member name="M:Discord.GuildExtensions.GetGuildWelcomeMessageReplyEnabled(Discord.IGuild)">
+            <summary>
+                Gets if guild welcome messages have a reply with sticker button.
+            </summary>
+            <param name="guild"> The guild to check. </param>
+            <returns> A <c>bool</c> indicating if the guild welcome messages have a reply with sticker button. </returns>
         </member>
         <member name="T:Discord.MessageExtensions">
             <summary>
@@ -13002,23 +13158,24 @@
             <exception cref="T:System.ArgumentNullException"> Thrown when the supplied token string is <c>null</c>, empty, or contains only whitespace.</exception>
             <exception cref="T:System.ArgumentException"> Thrown when the supplied <see cref="T:Discord.TokenType"/> or token value is invalid. </exception>
         </member>
-        <member name="M:Discord.Utils.UrlValidation.Validate(System.String)">
+        <member name="M:Discord.Utils.UrlValidation.Validate(System.String,System.Boolean)">
             <summary>
             Not full URL validation right now. Just ensures protocol is present and that it's either http or https
-            <see cref="M:Discord.Utils.UrlValidation.ValidateButton(System.String)"/> should be used for url buttons
+            <see cref="M:Discord.Utils.UrlValidation.ValidateButton(System.String)"/> should be used for url buttons.
             </summary>
-            <param name="url">url to validate before sending to Discord.</param>
+            <param name="url">The URL to validate before sending to Discord.</param>
+            <param name="allowAttachments"><see langword="true"/> to allow the <b>attachment://</b> protocol; otherwise <see langword="false"/>.</param>
             <exception cref="T:System.InvalidOperationException">A URL must include a protocol (http or https).</exception>
-            <returns>true if url is valid by our standard, false if null, throws an error upon invalid </returns>
+            <returns>true if URL is valid by our standard, false if null, throws an error upon invalid.</returns>
         </member>
         <member name="M:Discord.Utils.UrlValidation.ValidateButton(System.String)">
             <summary>
             Not full URL validation right now. Just Ensures the protocol is either http, https, or discord
-            <see cref="M:Discord.Utils.UrlValidation.Validate(System.String)"/> should be used everything other than url buttons
+            <see cref="!:Validate(string)"/> should be used everything other than url buttons.
             </summary>
-            <param name="url">the url to validate before sending to discord</param>
+            <param name="url">The URL to validate before sending to discord.</param>
             <exception cref="T:System.InvalidOperationException">A URL must include a protocol (either http, https, or discord).</exception>
-            <returns>true if the url is valid by our standard, false if null, throws an error upon invalid</returns>
+            <returns>true if the URL is valid by our standard, false if null, throws an error upon invalid.</returns>
         </member>
     </members>
 </doc>

@@ -639,6 +639,9 @@
         <member name="E:Discord.WebSocket.BaseSocketClient.GuildUpdated">
             <summary> Fired when a guild is updated. </summary>
         </member>
+        <member name="E:Discord.WebSocket.BaseSocketClient.GuildJoinRequestDeleted">
+            <summary>Fired when a user leaves without agreeing to the member screening </summary>
+        </member>
         <member name="E:Discord.WebSocket.BaseSocketClient.UserJoined">
             <summary> Fired when a user joins a guild. </summary>
         </member>
@@ -2274,10 +2277,10 @@
         <member name="P:Discord.WebSocket.SocketStageChannel.PrivacyLevel">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketStageChannel.DiscoverableDisabled">
+        <member name="P:Discord.WebSocket.SocketStageChannel.IsDiscoverableDisabled">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketStageChannel.Live">
+        <member name="P:Discord.WebSocket.SocketStageChannel.IsLive">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketStageChannel.IsSpeaker">
@@ -2610,7 +2613,7 @@
                 Gets the current users within this thread.
             </summary>
         </member>
-        <member name="P:Discord.WebSocket.SocketThreadChannel.Joined">
+        <member name="P:Discord.WebSocket.SocketThreadChannel.HasJoined">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketThreadChannel.IsPrivateThread">
@@ -2629,7 +2632,7 @@
         <member name="P:Discord.WebSocket.SocketThreadChannel.MemberCount">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketThreadChannel.Archived">
+        <member name="P:Discord.WebSocket.SocketThreadChannel.IsArchived">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketThreadChannel.ArchiveTimestamp">
@@ -2638,7 +2641,7 @@
         <member name="P:Discord.WebSocket.SocketThreadChannel.AutoArchiveDuration">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketThreadChannel.Locked">
+        <member name="P:Discord.WebSocket.SocketThreadChannel.IsLocked">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketThreadChannel.Users">
@@ -2664,7 +2667,7 @@
                 Downloads all users that have access to this thread.
             </summary>
             <param name="options">The options to be used when sending the request.</param>
-            <returns>A task representing the asyncronous download operation.</returns>
+            <returns>A task representing the asynchronous download operation.</returns>
         </member>
         <member name="M:Discord.WebSocket.SocketThreadChannel.JoinAsync(Discord.RequestOptions)">
             <inheritdoc/>
@@ -2679,7 +2682,7 @@
             <param name="user">The <see cref="T:Discord.IGuildUser"/> to add.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous operation of adding a member to a thread. 
+                A task that represents the asynchronous operation of adding a member to a thread.
             </returns>
         </member>
         <member name="M:Discord.WebSocket.SocketThreadChannel.RemoveUserAsync(Discord.IGuildUser,Discord.RequestOptions)">
@@ -2689,7 +2692,7 @@
             <param name="user">The <see cref="T:Discord.IGuildUser"/> to remove from this thread.</param>
             <param name="options">The options to be used when sending the request.</param>
             <returns>
-                A task that represents the asynchronous operation of removing a user from this thread. 
+                A task that represents the asynchronous operation of removing a user from this thread.
             </returns>
         </member>
         <member name="M:Discord.WebSocket.SocketThreadChannel.AddPermissionOverwriteAsync(Discord.IRole,Discord.OverwritePermissions,Discord.RequestOptions)">
@@ -2966,6 +2969,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGuild.PreferredCulture">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.WebSocket.SocketGuild.IsBoostProgressBarEnabled">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGuild.CreatedAt">
@@ -4081,7 +4087,7 @@
         </member>
         <member name="T:Discord.WebSocket.SocketSlashCommandDataOption">
             <summary>
-                Represents a Websocket-based <see cref="T:Discord.IApplicationCommandInteractionDataOption"/> received by the gateway
+                Represents a Websocket-based <see cref="T:Discord.IApplicationCommandInteractionDataOption"/> received by the gateway.
             </summary>
         </member>
         <member name="P:Discord.WebSocket.SocketSlashCommandDataOption.Name">
@@ -4100,7 +4106,7 @@
         </member>
         <member name="T:Discord.WebSocket.SocketApplicationCommand">
             <summary>
-                Represends a Websocket-based <see cref="T:Discord.IApplicationCommand"/>.
+                Represents a Websocket-based <see cref="T:Discord.IApplicationCommand"/>.
             </summary>
         </member>
         <member name="P:Discord.WebSocket.SocketApplicationCommand.IsGlobalCommand">
@@ -4120,7 +4126,7 @@
         <member name="P:Discord.WebSocket.SocketApplicationCommand.Description">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketApplicationCommand.DefaultPermission">
+        <member name="P:Discord.WebSocket.SocketApplicationCommand.IsDefaultPermission">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketApplicationCommand.Options">
@@ -4173,10 +4179,10 @@
         <member name="P:Discord.WebSocket.SocketApplicationCommandOption.Description">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketApplicationCommandOption.Default">
+        <member name="P:Discord.WebSocket.SocketApplicationCommandOption.IsDefault">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketApplicationCommandOption.Required">
+        <member name="P:Discord.WebSocket.SocketApplicationCommandOption.IsRequired">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketApplicationCommandOption.Choices">
@@ -4574,6 +4580,11 @@
         <member name="P:Discord.WebSocket.SocketMessage.Components">
             <inheritdoc/>
         </member>
+        <member name="P:Discord.WebSocket.SocketMessage.Interaction">
+            <summary>
+                Gets the interaction this message is a response to.
+            </summary>
+        </member>
         <member name="P:Discord.WebSocket.SocketMessage.Flags">
             <inheritdoc />
         </member>
@@ -4612,14 +4623,6 @@
                 Collection of WebSocket-based roles.
             </returns>
         </member>
-        <member name="P:Discord.WebSocket.SocketMessage.MentionedUsers">
-            <summary>
-                Returns the users mentioned in this message.
-            </summary>
-            <returns>
-                Collection of WebSocket-based users.
-            </returns>
-        </member>
         <member name="P:Discord.WebSocket.SocketMessage.Tags">
             <inheritdoc />
         </member>
@@ -4628,6 +4631,14 @@
         </member>
         <member name="P:Discord.WebSocket.SocketMessage.Reactions">
             <inheritdoc />
+        </member>
+        <member name="P:Discord.WebSocket.SocketMessage.MentionedUsers">
+            <summary>
+                Returns the users mentioned in this message.
+            </summary>
+            <returns>
+                Collection of WebSocket-based users.
+            </returns>
         </member>
         <member name="P:Discord.WebSocket.SocketMessage.Timestamp">
             <inheritdoc />
@@ -4665,6 +4676,9 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketMessage.Discord#IMessage#Components">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketMessage.Discord#IMessage#Interaction">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketMessage.Discord#IMessage#Stickers">
@@ -4799,9 +4813,6 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketUserMessage.MentionedRoles">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketUserMessage.MentionedUsers">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketUserMessage.Stickers">
@@ -4966,7 +4977,7 @@
         <member name="P:Discord.WebSocket.SocketSticker.Format">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketSticker.Available">
+        <member name="P:Discord.WebSocket.SocketSticker.IsAvailable">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketSticker.SortOrder">
@@ -4992,7 +5003,7 @@
         <member name="P:Discord.WebSocket.SocketUnknownSticker.PackId">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketUnknownSticker.Available">
+        <member name="P:Discord.WebSocket.SocketUnknownSticker.IsAvailable">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketUnknownSticker.SortOrder">
@@ -5035,12 +5046,6 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGroupUser.AvatarId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketGroupUser.BannerId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketGroupUser.AccentColor">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGroupUser.Presence">
@@ -5089,6 +5094,9 @@
         <member name="P:Discord.WebSocket.SocketGuildUser.Nickname">
             <inheritdoc />
         </member>
+        <member name="P:Discord.WebSocket.SocketGuildUser.GuildAvatarId">
+            <inheritdoc/>
+        </member>
         <member name="P:Discord.WebSocket.SocketGuildUser.IsBot">
             <inheritdoc />
         </member>
@@ -5099,12 +5107,6 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGuildUser.AvatarId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketGuildUser.BannerId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketGuildUser.AccentColor">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGuildUser.GuildPermissions">
@@ -5292,12 +5294,6 @@
         <member name="P:Discord.WebSocket.SocketSelfUser.AvatarId">
             <inheritdoc />
         </member>
-        <member name="P:Discord.WebSocket.SocketSelfUser.BannerId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketSelfUser.AccentColor">
-            <inheritdoc />
-        </member>
         <member name="P:Discord.WebSocket.SocketSelfUser.Presence">
             <inheritdoc />
         </member>
@@ -5354,10 +5350,7 @@
         <member name="P:Discord.WebSocket.SocketThreadUser.AvatarId">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.WebSocket.SocketThreadUser.BannerId">
-            <inheritdoc/>
-        </member>
-        <member name="P:Discord.WebSocket.SocketThreadUser.AccentColor">
+        <member name="P:Discord.WebSocket.SocketThreadUser.GuildAvatarId">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketThreadUser.DiscriminatorValue">
@@ -5467,12 +5460,6 @@
         <member name="P:Discord.WebSocket.SocketUnknownUser.AvatarId">
             <inheritdoc />
         </member>
-        <member name="P:Discord.WebSocket.SocketUnknownUser.BannerId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketUnknownUser.AccentColor">
-            <inheritdoc />
-        </member>
         <member name="P:Discord.WebSocket.SocketUnknownUser.IsBot">
             <inheritdoc />
         </member>
@@ -5501,12 +5488,6 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketUser.AvatarId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketUser.BannerId">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.WebSocket.SocketUser.AccentColor">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketUser.IsWebhook">
@@ -5545,9 +5526,6 @@
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketUser.GetAvatarUrl(Discord.ImageFormat,System.UInt16)">
-            <inheritdoc />
-        </member>
-        <member name="M:Discord.WebSocket.SocketUser.GetBannerUrl(Discord.ImageFormat,System.UInt16)">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketUser.GetDefaultAvatarUrl">
@@ -5631,14 +5609,6 @@
         <member name="P:Discord.WebSocket.SocketWebhookUser.AvatarId">
             <inheritdoc />
         </member>
-        <member name="P:Discord.WebSocket.SocketWebhookUser.BannerId">
-            <inheritdoc />
-            <exception cref="T:System.NotSupportedException">Webhook users does not support banners.</exception>
-        </member>
-        <member name="P:Discord.WebSocket.SocketWebhookUser.AccentColor">
-            <inheritdoc />
-            <exception cref="T:System.NotSupportedException">Webhook users does not support accent colors.</exception>
-        </member>
         <member name="P:Discord.WebSocket.SocketWebhookUser.IsBot">
             <inheritdoc />
         </member>
@@ -5661,6 +5631,12 @@
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#Nickname">
+            <inheritdoc />
+        </member>
+        <member name="P:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#GuildAvatarId">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#GetGuildAvatarUrl(Discord.ImageFormat,System.UInt16)">
             <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketWebhookUser.Discord#IGuildUser#PremiumSince">

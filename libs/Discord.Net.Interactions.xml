@@ -402,6 +402,9 @@
         <member name="P:Discord.Interactions.CommandInfo`1.Discord#Interactions#ICommandInfo#Parameters">
             <inheritdoc/>
         </member>
+        <member name="M:Discord.Interactions.CommandInfo`1.ToString">
+            <inheritdoc/>
+        </member>
         <member name="T:Discord.Interactions.ComponentCommandInfo">
             <summary>
                 Represents the info class of an attribute based method for handling Component Interaction events
@@ -790,6 +793,24 @@
                 Gets the allowed channel types for this option.
             </summary>
         </member>
+        <member name="T:Discord.Interactions.InteractionCommandContext">
+            <inheritdoc cref="T:Discord.IInteractionCommandContext"/>
+        </member>
+        <member name="P:Discord.Interactions.InteractionCommandContext.Client">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.InteractionCommandContext.Guild">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.InteractionCommandContext.Channel">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.InteractionCommandContext.User">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.InteractionCommandContext.Interaction">
+            <inheritdoc/>
+        </member>
         <member name="T:Discord.Interactions.InteractionCommandError">
             <summary>
                 Defines the type of error a command can throw.
@@ -864,6 +885,11 @@
         </member>
         <member name="M:Discord.Interactions.InteractionModuleBase`1.Discord#Interactions#IInteractionModuleBase#SetContext(Discord.IInteractionCommandContext)">
             <inheritdoc/>
+        </member>
+        <member name="T:Discord.Interactions.InteractionModuleBase">
+            <summary>
+                Provides a base class for a command module to inherit from.
+            </summary>
         </member>
         <member name="T:Discord.Interactions.InteractionService">
             <summary>
