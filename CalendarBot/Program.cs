@@ -26,7 +26,7 @@ namespace CalendarBot
             RunAsync(configuration).GetAwaiter().GetResult();
         }
 
-        static async Task RunAsync ( IConfiguration configuration )
+        async static Task RunAsync ( IConfiguration configuration )
         {
             using var services = ConfigureServices(new ServiceCollection(), configuration);
 
@@ -40,7 +40,6 @@ namespace CalendarBot
             calHandler.Initialize();
 
             var discord = services.GetRequiredService<DiscordSocketClient>();
-            //var discordOptions = services.GetRequiredService<DiscordOptions>();
 
             await discord.LoginAsync(TokenType.Bot, configuration["Discord:Token"]);
             await discord.StartAsync();
@@ -61,6 +60,7 @@ namespace CalendarBot
             return serviceCollection
                 //.Configure<LoggingOptions>(configuration.GetSection(LoggingOptions.SECTION))
                 //.Configure<DiscordOptions>(configuration.GetSection(DiscordOptions.SECTION))
+                .AddSingleton(configuration)
                 .AddLogging(builder =>
                 {
                     builder.AddSimpleConsole();
@@ -80,7 +80,7 @@ namespace CalendarBot
                 .AddSingleton<InteractionService>()
                 .AddSingleton<ILiteDatabase>(new LiteDatabase(configuration.GetConnectionString("LiteDB")))
                 .AddSingleton<ILiteCollection<CalendarEvent>>(services => {
-                    var collection = services.GetRequiredService<ILiteDatabase>().GetCollection<CalendarEvent>(BsonAutoId.Guid);
+                    var collection = services.GetRequiredService<ILiteDatabase>().GetCollection<CalendarEvent>();
                     collection.EnsureIndex(x => x.DateAndTime);
                     return collection;
                 })

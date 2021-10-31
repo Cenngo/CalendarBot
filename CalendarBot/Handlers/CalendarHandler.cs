@@ -1,4 +1,5 @@
 ﻿using LiteDB;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,17 +11,23 @@ namespace CalendarBot
 {
     internal class CalendarHandler
     {
-        public const double INTERVAL_MINS = 5;
-
         private readonly ILiteCollection<CalendarEvent> _events;
-        private readonly Timer _timer = new(TimeSpan.FromMinutes(INTERVAL_MINS).TotalMilliseconds);
-        private readonly TimeSpan _lookAheadSpan = TimeSpan.FromMinutes(INTERVAL_MINS / 2);
+        private readonly IConfiguration _config;
+        private readonly double _pollingInterval;
+        private readonly Timer _timer;
+        private readonly TimeSpan _lookAheadSpan;
+        private readonly DiscordSocketClient _discord;
 
         public event Func<CalendarEvent, Task> CalendarEventTriggered;
 
-        public CalendarHandler(ILiteCollection<CalendarEvent> events)
+        public CalendarHandler(ILiteCollection<CalendarEvent> events, IConfiguration configuration, DiscordSocketClient discord)
         {
             _events = events;
+            _config = configuration;
+            _discord = discord;
+            _pollingInterval = configuration.GetValue<double>("PollingInterval");
+            _timer = new(TimeSpan.FromSeconds(_pollingInterval).TotalMilliseconds);
+            _lookAheadSpan = TimeSpan.FromSeconds(_pollingInterval / 2);
         }
 
         public void Initialize()
@@ -45,24 +52,53 @@ namespace CalendarBot
 
         private async Task OnCalendarEvent(CalendarEvent calendarEvent) 
         {
-            var embed = new EmbedBuilder 
-            {
-                Title = "Scheduled Event: " + calendarEvent.Name,
-                Description = calendarEvent.Description,
-                Color = calendarEvent.Color,
-                Timestamp = calendarEvent.DateAndTime,
-            }.WithAuthor(calendarEvent.User)
-            .Build();
+            try {
+                var embed = new EmbedBuilder {
+                    Title = "Scheduled Event: " + calendarEvent.Name,
+                    Description = calendarEvent.Description,
+                    Color = calendarEvent.Color,
+                    Timestamp = calendarEvent.DateAndTime,
+                }
+                .Build();
 
-            var mentionBuilder = new StringBuilder();
+                var mentionBuilder = new StringBuilder();
+                var guild = _discord.GetGuild(calendarEvent.GuildId);
+                var roles = calendarEvent.TargetRoles.Select(x => guild.GetRole(x));
+                var users = calendarEvent.TargetUsers.Select(x => guild.GetUser(x));
 
-            foreach (var role in calendarEvent.TargetRoles)
-                mentionBuilder.Append(role.Mention);
 
-            foreach(var user in calendarEvent.TargetUsers)
-                mentionBuilder.Append(user.Mention);
+                foreach (var role in roles)
+                    mentionBuilder.Append(role.Mention);
 
-            await calendarEvent.Channel.SendMessageAsync(mentionBuilder.ToString(), embed: embed);
+                foreach (var user in users)
+                    mentionBuilder.Append(user.Mention);
+
+                var channel = _discord.GetChannel(calendarEvent.MessageChannelId) as IMessageChannel;
+
+                await channel?.SendMessageAsync(mentionBuilder.ToString(), embed: embed);
+            }
+            finally {
+                switch (calendarEvent.RecursionInterval) {
+                    case RecursionInterval.None:
+                        break;
+                    case RecursionInterval.Day:
+                        calendarEvent.DateAndTime.AddDays(1);
+                        _events.Insert(calendarEvent);
+                        break;
+                    case RecursionInterval.Week:
+                        calendarEvent.DateAndTime.AddDays(7);
+                        _events.Insert(calendarEvent);
+                        break;
+                    case RecursionInterval.Month:
+                        calendarEvent.DateAndTime.AddMonths(1);
+                        _events.Insert(calendarEvent);
+                        break;
+                    case RecursionInterval.Year:
+                        calendarEvent.DateAndTime.AddYears(1);
+                        _events.Insert(calendarEvent);
+                        break;
+                }
+            }
         }
     }
 }

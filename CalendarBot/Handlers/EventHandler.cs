@@ -60,7 +60,7 @@ namespace CalendarBot
                 if (!_logQueue.IsEmpty && _logQueue.TryDequeue(out var loggingPair))
                     loggingPair.Logger.Log(loggingPair.LogMessage.Severity.ToMicrosoft(), loggingPair.LogMessage.ToString());
 
-                await Task.Delay(_config.GetValue<int>("Logging:ProcessingInterval"));
+                await Task.Delay(_config.GetValue<int>("Logging:ProcessingInterval"), cancellationToken);
             }
         }
     }

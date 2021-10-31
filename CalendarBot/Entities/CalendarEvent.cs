@@ -10,18 +10,32 @@ namespace CalendarBot
     public sealed class CalendarEvent
     {
         [BsonId]
-        public Guid Guid {  get; set; }
+        public Guid Id {  get; set; }
 
-        public IUser User { get; init; }
-        public IMessageChannel Channel { get; init; }
-        public IGuild Guild { get; init; }
-        public DateTime DateAndTime { get; init; }
-        public string Name { get; init; }
-        public string Description {  get; init; }
-        public IReadOnlyList<IUser> TargetUsers { get; init; }
-        public IReadOnlyList<IRole> TargetRoles { get; init; }
+        public ulong UserId { get; set; }
+        public ulong MessageChannelId { get; set; }
+        public ulong GuildId { get; set; }
+        public DateTime DateAndTime { get; set; }
+        public string Name { get; set; }
+        public string Description {  get; set; }
+        public List<ulong> TargetUsers { get; set; }
+        public List<ulong> TargetRoles { get; set; }
         public bool Recurring => RecursionInterval == RecursionInterval.None;
-        public RecursionInterval RecursionInterval { get; init; }
-        public Color Color { get; init; }
+        public RecursionInterval RecursionInterval { get; set; }
+        public Color Color { get; set; }
+
+        [BsonCtor]
+        public CalendarEvent() { }
+
+        public CalendarEvent(string name, string description, IUser user, IGuild guild, DateTime dateAndTime, Color color, RecursionInterval recursionInterval = RecursionInterval.None)
+        {
+            Name = name;
+            Description = description;
+            UserId = user.Id;
+            GuildId = guild.Id;
+            DateAndTime = dateAndTime;
+            Color = color;
+            RecursionInterval = recursionInterval;
+        }
     }
 }

@@ -30,6 +30,27 @@ namespace CalendarBot
             await _commands.AddModulesAsync(Assembly.GetExecutingAssembly(), _serviceProvider);
             _discord.Ready += RegisterCommands;
             _discord.InteractionCreated += Discord_InteractionCreated;
+            _commands.ComponentCommandExecuted += ComponentCommandExecuted;
+            _commands.ContextCommandExecuted += ContextCommandExecuted;
+            _commands.SlashCommandExecuted += SlashCommandExecuted;
+        }
+
+        private async Task SlashCommandExecuted(SlashCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
+        {
+            if (!arg3.IsSuccess)
+                await arg2.Channel.SendMessageAsync(arg3.ErrorReason);
+        }
+
+        private async Task ContextCommandExecuted(ContextCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
+        {
+            if (!arg3.IsSuccess)
+                await arg2.Channel.SendMessageAsync(arg3.ErrorReason);
+        }
+
+        private async Task ComponentCommandExecuted(ComponentCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
+        {
+            if (!arg3.IsSuccess)
+                await arg2.Channel.SendMessageAsync(arg3.ErrorReason);
         }
 
         private async Task Discord_InteractionCreated(SocketInteraction arg)
