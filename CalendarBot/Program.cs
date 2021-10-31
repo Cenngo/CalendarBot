@@ -30,6 +30,10 @@ namespace CalendarBot
         {
             using var services = ConfigureServices(new ServiceCollection(), configuration);
 
+            var commands = services.GetRequiredService<InteractionService>();
+
+            commands.AddTypeConverter<Guid>(new GuidTypeConverter());
+
             await new CommandHandler(services, configuration)
                 .Initialize();
 

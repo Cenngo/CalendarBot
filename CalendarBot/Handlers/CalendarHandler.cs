@@ -41,8 +41,7 @@ namespace CalendarBot
         {
             var now = DateTime.Now;
 
-            var todaysEvents = _events.Find(x => x.DateAndTime.Day == DateTime.Now.Day);
-            var upcoming = todaysEvents.Where(x => x.DateAndTime <= now - _lookAheadSpan || x.DateAndTime >= now - _lookAheadSpan);
+            var upcoming = _events.Find(x => x.DateAndTime <= now - _lookAheadSpan || x.DateAndTime >= now - _lookAheadSpan);
 
             foreach (var ev in upcoming) {
                 CalendarEventTriggered?.Invoke(ev);

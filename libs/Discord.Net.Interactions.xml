@@ -1236,6 +1236,15 @@
                 Use compiled lambda expressions to create module instances and execute commands. This method improves performance at the cost of memory
             </summary>
         </member>
+        <member name="P:Discord.Interactions.Results.AutocompleteResult.Error">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.Results.AutocompleteResult.ErrorReason">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.Interactions.Results.AutocompleteResult.IsSuccess">
+            <inheritdoc/>
+        </member>
         <member name="T:Discord.Interactions.ExecuteResult">
             <summary>
                 Contains information of the command's overall execution result.
