@@ -38,25 +38,40 @@ namespace CalendarBot
         private async Task SlashCommandExecuted(SlashCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
         {
             if (!arg3.IsSuccess)
-                await arg2.Channel.SendMessageAsync(arg3.ErrorReason);
+                try {
+                    await arg2.Interaction.RespondAsync(embed: EmbedUtility.FromError(null, arg3.ErrorReason, false));
+                }
+                catch (InvalidOperationException ex) when (ex.Message == "Cannot respond twice to the same interaction") {
+                    await arg2.Interaction.FollowupAsync(embed: EmbedUtility.FromError(null, arg3.ErrorReason, false));
+                }
         }
 
         private async Task ContextCommandExecuted(ContextCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
         {
             if (!arg3.IsSuccess)
-                await arg2.Channel.SendMessageAsync(arg3.ErrorReason);
+                try {
+                    await arg2.Interaction.RespondAsync(embed: EmbedUtility.FromError(null, arg3.ErrorReason, false));
+                }
+                catch (InvalidOperationException ex) when (ex.Message == "Cannot respond twice to the same interaction") {
+                    await arg2.Interaction.FollowupAsync(embed: EmbedUtility.FromError(null, arg3.ErrorReason, false));
+                }
         }
 
         private async Task ComponentCommandExecuted(ComponentCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
         {
             if (!arg3.IsSuccess)
-                await arg2.Channel.SendMessageAsync(arg3.ErrorReason);
+                try {
+                    await arg2.Interaction.RespondAsync(embed: EmbedUtility.FromError(null, arg3.ErrorReason, false));
+                }
+                catch (InvalidOperationException ex) when (ex.Message == "Cannot respond twice to the same interaction") {
+                    await arg2.Interaction.FollowupAsync(embed: EmbedUtility.FromError(null, arg3.ErrorReason, false));
+                }
         }
 
         private async Task Discord_InteractionCreated(SocketInteraction arg)
         {
             var ctx = new SocketInteractionCommandContext(_discord, arg);
-            var result = await _commands.ExecuteCommandAsync(ctx, _serviceProvider);
+            await _commands.ExecuteCommandAsync(ctx, _serviceProvider);
         }
 
         private async Task RegisterCommands ( )

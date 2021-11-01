@@ -12,7 +12,6 @@ namespace CalendarBot
     internal class CalendarHandler
     {
         private readonly ILiteCollection<CalendarEvent> _events;
-        private readonly IConfiguration _config;
         private readonly double _pollingInterval;
         private readonly Timer _timer;
         private readonly TimeSpan _lookAheadSpan;
@@ -23,7 +22,6 @@ namespace CalendarBot
         public CalendarHandler(ILiteCollection<CalendarEvent> events, IConfiguration configuration, DiscordSocketClient discord)
         {
             _events = events;
-            _config = configuration;
             _discord = discord;
             _pollingInterval = configuration.GetValue<double>("PollingInterval");
             _timer = new(TimeSpan.FromSeconds(_pollingInterval).TotalMilliseconds);
@@ -41,7 +39,7 @@ namespace CalendarBot
         {
             var now = DateTime.Now;
 
-            var upcoming = _events.Find(x => x.DateAndTime <= now - _lookAheadSpan || x.DateAndTime >= now - _lookAheadSpan);
+            var upcoming = _events.Find(x => x.DateAndTime < now + _lookAheadSpan && x.DateAndTime >= now - _lookAheadSpan);
 
             foreach (var ev in upcoming) {
                 CalendarEventTriggered?.Invoke(ev);
@@ -61,16 +59,14 @@ namespace CalendarBot
                 .Build();
 
                 var mentionBuilder = new StringBuilder();
-                var guild = _discord.GetGuild(calendarEvent.GuildId);
-                var roles = calendarEvent.TargetRoles.Select(x => guild.GetRole(x));
-                var users = calendarEvent.TargetUsers.Select(x => guild.GetUser(x));
 
+                if(calendarEvent.TargetRoles is not null)
+                    foreach (var role in calendarEvent.TargetRoles)
+                        mentionBuilder.Append($"<@{role}>");
 
-                foreach (var role in roles)
-                    mentionBuilder.Append(role.Mention);
-
-                foreach (var user in users)
-                    mentionBuilder.Append(user.Mention);
+                if(calendarEvent.TargetUsers is not null)
+                    foreach (var user in calendarEvent.TargetUsers)
+                        mentionBuilder.Append($"<@{user}>");
 
                 var channel = _discord.GetChannel(calendarEvent.MessageChannelId) as IMessageChannel;
 
@@ -97,6 +93,8 @@ namespace CalendarBot
                         _events.Insert(calendarEvent);
                         break;
                 }
+
+                _events.Delete(calendarEvent.Id);
             }
         }
     }

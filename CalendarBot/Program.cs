@@ -10,6 +10,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using LiteDB;
+using System.Linq;
 
 namespace CalendarBot
 {
@@ -71,7 +72,9 @@ namespace CalendarBot
                 })
                 .AddSingleton(new DiscordSocketConfig
                 {
-                    LogLevel = configuration.GetValue<LogLevel>("Logging:Discord").ToDiscord()
+                    LogLevel = configuration.GetValue<LogLevel>("Logging:Discord").ToDiscord(),
+                    GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.AllUnprivileged,
+                    AlwaysDownloadUsers = true
                 })
                 .AddSingleton<DiscordSocketClient>()
                 .AddSingleton(new InteractionServiceConfig
@@ -86,6 +89,7 @@ namespace CalendarBot
                 .AddSingleton<ILiteCollection<CalendarEvent>>(services => {
                     var collection = services.GetRequiredService<ILiteDatabase>().GetCollection<CalendarEvent>();
                     collection.EnsureIndex(x => x.DateAndTime);
+                    collection.EnsureIndex(x => x.Name);
                     return collection;
                 })
                 .AddSingleton<CalendarHandler>()

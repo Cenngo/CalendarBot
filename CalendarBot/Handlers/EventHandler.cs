@@ -14,7 +14,6 @@ namespace CalendarBot
     internal class EventHandler<T> where T : BaseSocketClient
     {
         private readonly IConfiguration _config;
-        private readonly IServiceProvider _services;
 
         private readonly T _discord;
         private readonly InteractionService _commands;
@@ -25,7 +24,6 @@ namespace CalendarBot
         public EventHandler( IServiceProvider serviceProvider, IConfiguration configuration )
         {
             _config = configuration;
-            _services = serviceProvider;
 
             _discord = serviceProvider.GetRequiredService<T>();
             _commands = serviceProvider.GetRequiredService<InteractionService>();

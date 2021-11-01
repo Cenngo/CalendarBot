@@ -1,24 +1,22 @@
-﻿using Discord;
-using Discord.Interactions;
-using LiteDB;
+﻿using LiteDB;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CalendarBot
 {
-    public sealed class UtilityModule : InteractionModuleBase<SocketInteractionCommandContext>
+    public sealed class CalendarModule : InteractionModuleBase<SocketInteractionCommandContext>
     {
         public ILiteCollection<CalendarEvent> Events { get; set; }
 
         [SlashCommand("ping", "recieve a pong")]
-        public async Task Ping() => 
-            await RespondAsync("pong", ephemeral: true);
+        public async Task Ping() =>
+            await RespondAsync("pong");
 
         [SlashCommand("latency", "Get the estimate round-trip latency to the gateway server")]
-        public async Task Latency() => 
+        public async Task Latency() =>
             await RespondAsync(Context.Client.Latency.ToString() + " ms", ephemeral: true);
 
         [SlashCommand("invite", "Get the invite link")]
@@ -39,7 +37,7 @@ namespace CalendarBot
             [InclusiveRange(0, 9999)] int year,
             [InclusiveRange(0, 23)] int hour,
             [InclusiveRange(0, 59)] int minute,
-            [Summary("recursion-interval")]RecursionInterval recursionInterval = RecursionInterval.None)
+            [Summary("recursion-interval")] RecursionInterval recursionInterval = RecursionInterval.None)
         {
             var guid = Guid.NewGuid();
 
@@ -56,7 +54,7 @@ namespace CalendarBot
             });
 
             var roles = Context.Guild.Roles;
-            var users = await Context.Guild.GetUsersAsync().FlattenAsync();
+            var users = Context.Guild.Users;
 
             var targetRoles = new List<SelectMenuOptionBuilder>();
             var targetUsers = new List<SelectMenuOptionBuilder>();
@@ -71,7 +69,7 @@ namespace CalendarBot
                 options: roles.Select(x => new SelectMenuOptionBuilder(x.Name, x.Id.ToString())).ToList(), maxValues: roles.Count);
 
             var targetUserSelector = new SelectMenuBuilder($"event-target-user:{guid}", placeholder: "Select target users",
-                options: users.Select(x => new SelectMenuOptionBuilder(x.Username, x.Id.ToString())).ToList(), maxValues: users.Count());
+                options: users.Select(x => new SelectMenuOptionBuilder(x.Username, x.Id.ToString())).ToList(), maxValues: users.Count);
 
             var component = new ComponentBuilder()
                 .WithSelectMenu(targetRoleSelector, 0)
@@ -79,66 +77,67 @@ namespace CalendarBot
                 .WithButton("Dismiss", "dismiss", ButtonStyle.Secondary, emote: Emoji.Parse(":heavy_multiplication_x:"), row: 2)
                 .Build();
 
-            await FollowupAsync($"Configure {name} event", component: component, ephemeral: true);
+            await RespondAsync(embed: EmbedUtility.FromPrimary($"Configure {name} event", null), component: component, ephemeral: true);
         }
 
         [SlashCommand("print", "Print the events of a day")]
-        [Acknowledge]
-        public async Task Display([InclusiveRange(1, 31)]int day, Months month, [InclusiveRange(1, 9999)]int year)
+        public async Task Print([InclusiveRange(1, 31)] int day, Months month, [InclusiveRange(1, 9999)] int year)
         {
             var targetDate = new DateTime(year, (int)month, day);
             var events = Events.Find(x => x.DateAndTime.Date == targetDate).OrderBy(x => x.DateAndTime);
 
-            var embedBuilder = new EmbedBuilder {
-                Title = $"Upcoming Server Events for {targetDate:dd/MMM/yyyy}",
-                Color = Color.Orange,
-            };
+            var embed = EmbedUtility.FromPrimary($"Upcoming Server Events [{targetDate:dd/MMM/yyyy}]", null, builder => {
+                if (!events.Any()) {
+                    builder.Description = "No events found";
+                }
+                else {
+                    foreach (var ev in events)
+                        builder.AddField(ev.Name + $" - **{ev.DateAndTime:[HH:mm]}**", ev.Description);
+                }
+            });
 
-            if (!events.Any()) {
-                embedBuilder.Description = "No events";
-                await FollowupAsync(embed: embedBuilder.Build(), ephemeral: true);
-                return;
-            }
+            var component = events.Any() ? new ComponentBuilder().WithSelectMenu("event-configure",
+                events.Select(x => new SelectMenuOptionBuilder(x.Name, x.Id.ToString(), x.Id.ToString())).ToList()).Build() : null;
 
-            List<SelectMenuOptionBuilder> options = new();
-
-            foreach (var ev in events) {
-                embedBuilder.AddField(ev.Name + $" - **{ev.DateAndTime:[HH:mm]}**", ev.Description);
-                options.Add(new SelectMenuOptionBuilder(ev.Name, ev.Id.ToString(), ev.Id.ToString()));
-            }
-
-            var component = new ComponentBuilder().WithSelectMenu("event-configure", options).Build();
-
-
-            await FollowupAsync(embed: embedBuilder.Build(), component: component, ephemeral: true);
-        }
-
-        [ComponentInteraction("event-configure")]
-        [Acknowledge]
-        public async Task ConfigureEvent(string values)
-        {
-            var ev = Events.FindById(Guid.Parse(values));
-
-            var component = new ComponentBuilder()
-                .WithButton("Change Date", $"event-change-date:{ev.Id}")
-                .WithButton("Change Time", $"event-change-time:{ev.Id}")
-                .WithButton("Configure Targets", $"event-change-targets:{ev.Id}")
-                .WithButton("Delete", $"event-delete:{ev.Id}", ButtonStyle.Danger)
-                .Build();
-
-            var embed = new EmbedBuilder {
-                Title = ev.Name,
-                Description = ev.Description,
-                Color = Color.Orange,
-                Timestamp = ev.DateAndTime
-            }.WithAuthor(await Context.Client.GetUserAsync(ev.UserId))
-            .Build();
 
             await RespondAsync(embed: embed, component: component, ephemeral: true);
         }
 
+        [ComponentInteraction("event-configure")]
+        public async Task ConfigureEvent(string[] values)
+        {
+            var ev = Events.FindById(Guid.Parse(values[0]));
+
+            if (ev is null) {
+                await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                return;
+            }
+
+            var component = new ComponentBuilder()
+                .WithButton("Change Date", $"event-change-date:{ev.Id}", ButtonStyle.Primary, Emoji.Parse(":calendar:"))
+                .WithButton("Change Time", $"event-change-time:{ev.Id}", ButtonStyle.Primary, Emoji.Parse(":clock1:"))
+                .WithButton("Configure Targets", $"event-change-targets:{ev.Id}", ButtonStyle.Primary, Emoji.Parse(":loudspeaker:"))
+                .WithButton("Delete", $"event-delete:{ev.Id}", ButtonStyle.Danger, Emoji.Parse(":wastebasket:"))
+                .Build();
+
+            var embed = EmbedUtility.FromPrimary(ev.Name, ev.Description, builder => builder.Timestamp = ev.DateAndTime);
+
+            await RespondAsync(embed: embed, component: component, ephemeral: true);
+        }
+
+        [ComponentInteraction("event-change-time:*")]
+        public async Task ChangeTimeDialog(string guid)
+        {
+            var ev = Events.FindById(Guid.Parse(guid));
+
+            if (ev is null) {
+                await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                return;
+            }
+        }
+
         [SlashCommand("change-date", "Change the date of an event")]
-        public async Task ChangeDate([EventAutocompleter]Guid guid, [InclusiveRange(1, 31)]int day, Months month, [InclusiveRange(1, 9999)]int year)
+        public async Task ChangeDate([EventAutocompleter] Guid guid, [InclusiveRange(1, 31)] int day, Months month, [InclusiveRange(1, 9999)] int year)
         {
             var ev = Events.FindById(guid);
 
@@ -146,13 +145,13 @@ namespace CalendarBot
             ev.DateAndTime = new DateTime(year, (int)month, day, time.Hours, time.Minutes, time.Seconds);
 
             if (Events.Update(ev))
-                await RespondAsync("Successfully updated the event", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromSuccess(null, "Successfully updated the event", false), ephemeral: true);
             else
-                await RespondAsync("There was a problem", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromError(null, "There was a problem", false), ephemeral: true);
         }
 
         [SlashCommand("change-time", "Change the time of an event")]
-        public async Task ChangeTime([EventAutocompleter]Guid guid, [InclusiveRange(0, 23)]int hour, [InclusiveRange(0, 59)]int minute)
+        public async Task ChangeTime([EventAutocompleter] Guid guid, [InclusiveRange(0, 23)] int hour, [InclusiveRange(0, 59)] int minute)
         {
             var ev = Events.FindById(guid);
 
@@ -160,38 +159,50 @@ namespace CalendarBot
             ev.DateAndTime = new DateTime(date.Year, date.Month, date.Day, hour, minute, 0);
 
             if (Events.Update(ev))
-                await RespondAsync("Successfully updated the event", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromSuccess(null, "Successfully updated the event", false), ephemeral: true);
             else
-                await RespondAsync("There was a problem", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromError(null, "There was a problem", false), ephemeral: true);
         }
 
         [SlashCommand("rename", "Change the name of an event")]
-        public async Task Rename([EventAutocompleter]Guid guid, [Summary("new-name")]string name)
+        public async Task Rename([EventAutocompleter] Guid guid, [Summary("new-name")] string name)
         {
             var ev = Events.FindById(guid);
 
             ev.Name = name;
 
             if (Events.Update(ev))
-                await RespondAsync("Successfully updated the event", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromSuccess(null, "Successfully updated the event", false), ephemeral: true);
             else
-                await RespondAsync("There was a problem", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromError(null, "There was a problem", false), ephemeral: true);
         }
 
         [SlashCommand("delete", "Delete an event")]
         public async Task Delete(Guid guid)
         {
-            if(Events.Delete(guid))
-                await RespondAsync("Successfully deleted the event", ephemeral: true);
+            if (Events.Delete(guid))
+                await RespondAsync(embed: EmbedUtility.FromSuccess(null, "Event deleted.", false), ephemeral: true);
             else
-                await RespondAsync("There was a problem", ephemeral: true);
+                await RespondAsync(embed: EmbedUtility.FromError(null, "Event couln't be deleted.", false), ephemeral: true);
         }
 
         [ComponentInteraction("event-delete:*")]
-        [Acknowledge]
         public async Task Delete(string guid)
         {
-            Events.Delete(Guid.Parse(guid));
+            if (Events.Delete(Guid.Parse(guid)))
+                await (Context.Interaction as SocketMessageComponent).UpdateAsync(props => {
+                    props.Content = string.Empty;
+                    props.Embeds = null;
+                    props.Components = null;
+                    props.Embed = EmbedUtility.FromSuccess(null, "Event deleted.", false);
+                });
+            else
+                await (Context.Interaction as SocketMessageComponent).UpdateAsync(props => {
+                    props.Content = string.Empty;
+                    props.Embeds = null;
+                    props.Components = null;
+                    props.Embed = EmbedUtility.FromError(null, "Event couln't be deleted.", false);
+                });
         }
 
         [ComponentInteraction("event-target-role:*")]
@@ -201,6 +212,11 @@ namespace CalendarBot
             var roles = values.Select(x => Convert.ToUInt64(x));
 
             var ev = Events.FindById(Guid.Parse(guid));
+
+            if (ev is null) {
+                await FollowupAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                return;
+            }
 
             if (ev.TargetRoles is not null)
                 ev.TargetRoles.AddRange(roles);
@@ -220,6 +236,11 @@ namespace CalendarBot
 
             var ev = Events.FindById(Guid.Parse(guid));
 
+            if (ev is null) {
+                await FollowupAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                return;
+            }
+
             if (ev.TargetUsers is not null)
                 ev.TargetUsers.AddRange(users);
             else {
@@ -234,9 +255,10 @@ namespace CalendarBot
         public async Task Dismiss()
         {
             await (Context.Interaction as SocketMessageComponent).UpdateAsync(props => {
-                props.Content = ":white_check_mark: Message Dismissed";
+                props.Content = string.Empty;
                 props.Components = null;
                 props.Embeds = null;
+                props.Embed = EmbedUtility.FromSuccess(null, "Message Dismissed", false);
             });
         }
     }
