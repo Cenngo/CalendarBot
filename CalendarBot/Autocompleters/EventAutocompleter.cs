@@ -9,18 +9,21 @@ namespace CalendarBot
 {
     internal class EventAutocompleter : Autocompleter
     {
-        public override Task<IEnumerable<AutocompleteResult>> GenerateSuggestionsAsync(IInteractionCommandContext context, AutocompleteOption option, IServiceProvider services)
+        public override Task<AutocompletionResult> GenerateSuggestionsAsync(IInteractionCommandContext context, SocketAutocompleteInteraction autocompleteInteraction, IParameterInfo parameter, IServiceProvider services)
         {
             var events = services.GetRequiredService<ILiteCollection<CalendarEvent>>();
 
-            var value = option.Value as string;
+            var value = autocompleteInteraction.Data.Current.Value as string;
 
             if (string.IsNullOrEmpty(value))
-                return Task.FromResult<IEnumerable<AutocompleteResult>>(null);
+                return Task.FromResult(AutocompletionResult.FromSuccess(null));
             else {
                 var suggestions = events.Find(x => x.Name.StartsWith(value));
-                return Task.FromResult(suggestions.Select(x => new AutocompleteResult(x.Name, x.Id.ToString())));
+                return Task.FromResult(AutocompletionResult.FromSuccess(suggestions.Select(x => new AutocompleteResult(x.Name, x.Id.ToString()))));
             }
         }
+
+        protected override string GetLogString(IInteractionCommandContext context) =>
+            $"Autocomplete: \"{base.ToString()}\" for {context.User} in {context.Guild}/{context.Channel}";
     }
 }

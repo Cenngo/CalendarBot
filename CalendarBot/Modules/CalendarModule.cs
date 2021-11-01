@@ -137,7 +137,7 @@ namespace CalendarBot
         }
 
         [SlashCommand("change-date", "Change the date of an event")]
-        public async Task ChangeDate([EventAutocompleter] Guid guid, [InclusiveRange(1, 31)] int day, Months month, [InclusiveRange(1, 9999)] int year)
+        public async Task ChangeDate([Autocomplete(typeof(EventAutocompleter))] Guid guid, [InclusiveRange(1, 31)] int day, Months month, [InclusiveRange(1, 9999)] int year)
         {
             var ev = Events.FindById(guid);
 
@@ -151,7 +151,7 @@ namespace CalendarBot
         }
 
         [SlashCommand("change-time", "Change the time of an event")]
-        public async Task ChangeTime([EventAutocompleter] Guid guid, [InclusiveRange(0, 23)] int hour, [InclusiveRange(0, 59)] int minute)
+        public async Task ChangeTime([Autocomplete(typeof(EventAutocompleter))] Guid guid, [InclusiveRange(0, 23)] int hour, [InclusiveRange(0, 59)] int minute)
         {
             var ev = Events.FindById(guid);
 
@@ -165,7 +165,7 @@ namespace CalendarBot
         }
 
         [SlashCommand("rename", "Change the name of an event")]
-        public async Task Rename([EventAutocompleter] Guid guid, [Summary("new-name")] string name)
+        public async Task Rename([Autocomplete(typeof(EventAutocompleter))] Guid guid, [Summary("new-name")] string name)
         {
             var ev = Events.FindById(guid);
 

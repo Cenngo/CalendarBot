@@ -537,7 +537,7 @@
         </member>
         <member name="P:Discord.Interactions.ICommandInfo.IgnoreGroupNames">
             <summary>
-                If <see langword="true"/>, this command will be registered and executed as a standalone command, unaffected by the <see cref="T:Discord.Interactions.GroupAttribute"/>s of
+                If <see langword="true"/>, this command will be registered and executed as a standalone command, unaffected by the <see cref="!:InteractionGroupAttribute"/>s of
                 of the commands parents
             </summary>
         </member>
@@ -548,7 +548,7 @@
         </member>
         <member name="P:Discord.Interactions.ICommandInfo.IsTopLevelCommand">
             <summary>
-                <see langword="true"/> if this command is a top level command and none of its parents have a <see cref="T:Discord.Interactions.GroupAttribute"/>
+                <see langword="true"/> if this command is a top level command and none of its parents have a <see cref="!:InteractionGroupAttribute"/>
             </summary>
         </member>
         <member name="P:Discord.Interactions.ICommandInfo.Module">
@@ -658,12 +658,12 @@
         </member>
         <member name="P:Discord.Interactions.ModuleInfo.SlashGroupName">
             <summary>
-                Group name of this module, if the module is marked with a <see cref="T:Discord.Interactions.GroupAttribute"/>
+                Group name of this module, if the module is marked with a <see cref="!:InteractionGroupAttribute"/>
             </summary>
         </member>
         <member name="P:Discord.Interactions.ModuleInfo.IsSlashGroup">
             <summary>
-                <see langword="true"/> if this module is marked with a <see cref="T:Discord.Interactions.GroupAttribute"/>
+                <see langword="true"/> if this module is marked with a <see cref="!:InteractionGroupAttribute"/>
             </summary>
         </member>
         <member name="P:Discord.Interactions.ModuleInfo.Description">
@@ -718,7 +718,7 @@
         </member>
         <member name="P:Discord.Interactions.ModuleInfo.IsTopLevelGroup">
             <summary>
-                <see langword="true"/> if this module has a valid <see cref="T:Discord.Interactions.GroupAttribute"/> and has no parent with a <see cref="T:Discord.Interactions.GroupAttribute"/>
+                <see langword="true"/> if this module has a valid <see cref="!:InteractionGroupAttribute"/> and has no parent with a <see cref="!:InteractionGroupAttribute"/>
             </summary>
         </member>
         <member name="P:Discord.Interactions.ModuleInfo.DontAutoRegister">
@@ -843,7 +843,7 @@
         </member>
         <member name="F:Discord.Interactions.InteractionCommandError.UnmetPrecondition">
             <summary>
-                Thrown when the command fails to meet a <see cref="T:Discord.Interactions.PreconditionAttribute"/>'s conditions.
+                Thrown when the command fails to meet a <see cref="!:InteractionPreconditionAttribute"/>'s conditions.
             </summary>
         </member>
         <member name="F:Discord.Interactions.InteractionCommandError.ParseFailed">
@@ -1235,15 +1235,6 @@
             <summary>
                 Use compiled lambda expressions to create module instances and execute commands. This method improves performance at the cost of memory
             </summary>
-        </member>
-        <member name="P:Discord.Interactions.Results.AutocompleteResult.Error">
-            <inheritdoc/>
-        </member>
-        <member name="P:Discord.Interactions.Results.AutocompleteResult.ErrorReason">
-            <inheritdoc/>
-        </member>
-        <member name="P:Discord.Interactions.Results.AutocompleteResult.IsSuccess">
-            <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.ExecuteResult">
             <summary>
