@@ -2,7 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace CalendarBot
@@ -10,6 +13,7 @@ namespace CalendarBot
     public sealed class CalendarModule : InteractionModuleBase<SocketInteractionCommandContext>
     {
         public ILiteCollection<CalendarEvent> Events { get; set; }
+        public CultureInfo Culture {  get; set; }
 
         [SlashCommand("ping", "recieve a pong")]
         public async Task Ping() =>
@@ -30,109 +34,92 @@ namespace CalendarBot
         }
 
         [SlashCommand("create", "create a calendar event")]
-        [Acknowledge]
         public async Task Create(string name, string description,
             [InclusiveRange(1, 31)] int day,
             Months month,
             [InclusiveRange(0, 9999)] int year,
             [InclusiveRange(0, 23)] int hour,
             [InclusiveRange(0, 59)] int minute,
-            [Summary("recursion-interval")] RecursionInterval recursionInterval = RecursionInterval.None)
+            RecursionInterval recursionInterval = RecursionInterval.None)
         {
             var guid = Guid.NewGuid();
 
-            var value = Events.Insert(new CalendarEvent {
+            var newEvent = new CalendarEvent {
                 Id = guid,
                 Name = name,
                 Description = description,
+                CreatedAt = DateTime.Now,
                 DateAndTime = new DateTime(year, (int)month, day, hour, minute, 0, DateTimeKind.Local),
                 Color = Color.Orange,
                 MessageChannelId = Context.Channel.Id,
                 GuildId = Context.Guild.Id,
                 RecursionInterval = recursionInterval,
                 UserId = Context.User.Id
-            });
+            };
 
-            var roles = Context.Guild.Roles;
-            var users = Context.Guild.Users;
+            Events.Insert(newEvent);
 
-            var targetRoles = new List<SelectMenuOptionBuilder>();
-            var targetUsers = new List<SelectMenuOptionBuilder>();
-
-            foreach (var role in roles)
-                targetRoles.Add(new SelectMenuOptionBuilder(role.Name, role.Id.ToString()));
-
-            foreach (var user in users.Where(x => !x.IsBot))
-                targetUsers.Add(new SelectMenuOptionBuilder(user.Username, user.Id.ToString()));
-
-            var targetRoleSelector = new SelectMenuBuilder($"event-target-role:{guid}", placeholder: "Select target roles",
-                options: roles.Select(x => new SelectMenuOptionBuilder(x.Name, x.Id.ToString())).ToList(), maxValues: roles.Count);
-
-            var targetUserSelector = new SelectMenuBuilder($"event-target-user:{guid}", placeholder: "Select target users",
-                options: users.Select(x => new SelectMenuOptionBuilder(x.Username, x.Id.ToString())).ToList(), maxValues: users.Count);
-
-            var component = new ComponentBuilder()
-                .WithSelectMenu(targetRoleSelector, 0)
-                .WithSelectMenu(targetUserSelector, 1)
-                .WithButton("Dismiss", "dismiss", ButtonStyle.Secondary, emote: Emoji.Parse(":heavy_multiplication_x:"), row: 2)
-                .Build();
-
-            await RespondAsync(embed: EmbedUtility.FromPrimary($"Configure {name} event", null), component: component, ephemeral: true);
+            await PrintTargetConfigure(newEvent, "add");
         }
 
-        [SlashCommand("print", "Print the events of a day")]
-        public async Task Print([InclusiveRange(1, 31)] int day, Months month, [InclusiveRange(1, 9999)] int year)
+        [Group("print", "display event information")]
+        public class Print : InteractionModuleBase<SocketInteractionCommandContext>
         {
-            var targetDate = new DateTime(year, (int)month, day);
-            var events = Events.Find(x => x.DateAndTime.Date == targetDate).OrderBy(x => x.DateAndTime);
+            public ILiteCollection<CalendarEvent> Events { get; set; }
+            public CultureInfo Culture { get; set; }
 
-            var embed = EmbedUtility.FromPrimary($"Upcoming Server Events [{targetDate:dd/MMM/yyyy}]", null, builder => {
-                if (!events.Any()) {
-                    builder.Description = "No events found";
-                }
-                else {
-                    foreach (var ev in events)
-                        builder.AddField(ev.Name + $" - **{ev.DateAndTime:[HH:mm]}**", ev.Description);
-                }
-            });
+            [SlashCommand("day", "Print the events of a day")]
+            public async Task Day([InclusiveRange(1, 31)] int day, Months month, [InclusiveRange(1, 9999)] int year)
+            {
+                var targetDate = new DateTime(year, (int)month, day);
+                var events = Events.Find(x => x.DateAndTime.Date == targetDate).OrderBy(x => x.DateAndTime);
 
-            var component = events.Any() ? new ComponentBuilder().WithSelectMenu("event-configure",
-                events.Select(x => new SelectMenuOptionBuilder(x.Name, x.Id.ToString(), x.Id.ToString())).ToList()).Build() : null;
+                var embed = EmbedUtility.FromPrimary($"Upcoming Server Events [{targetDate.ToString(Culture.DateTimeFormat.ShortDatePattern)}]", null, builder => {
+                    if (!events.Any()) {
+                        builder.Description = "No events found";
+                    }
+                    else {
+                        foreach (var ev in events)
+                            builder.AddField(ev.Name + $" - **{ev.DateAndTime.ToString(Culture.DateTimeFormat.ShortTimePattern)}**", ev.Description);
+                    }
+                });
+
+                var component = events.Any() ? new ComponentBuilder().WithSelectMenu("event-configure",
+                    events.Select(x => new SelectMenuOptionBuilder(x.Name, x.Id.ToString(), x.Id.ToString())).ToList()).Build() : null;
 
 
-            await RespondAsync(embed: embed, component: component, ephemeral: true);
-        }
-
-        [ComponentInteraction("event-configure")]
-        public async Task ConfigureEvent(string[] values)
-        {
-            var ev = Events.FindById(Guid.Parse(values[0]));
-
-            if (ev is null) {
-                await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
-                return;
+                await RespondAsync(embed: embed, component: component, ephemeral: true);
             }
 
-            var component = new ComponentBuilder()
-                .WithButton("Change Date", $"event-change-date:{ev.Id}", ButtonStyle.Primary, Emoji.Parse(":calendar:"))
-                .WithButton("Change Time", $"event-change-time:{ev.Id}", ButtonStyle.Primary, Emoji.Parse(":clock1:"))
-                .WithButton("Configure Targets", $"event-change-targets:{ev.Id}", ButtonStyle.Primary, Emoji.Parse(":loudspeaker:"))
-                .WithButton("Delete", $"event-delete:{ev.Id}", ButtonStyle.Danger, Emoji.Parse(":wastebasket:"))
-                .Build();
+            [SlashCommand("event", "Print the info of an event")]
+            public async Task Event([Autocomplete(typeof(EventAutocompleter))] Guid guid) => 
+                await PrintConfigureEventDialog(guid);
 
-            var embed = EmbedUtility.FromPrimary(ev.Name, ev.Description, builder => builder.Timestamp = ev.DateAndTime);
 
-            await RespondAsync(embed: embed, component: component, ephemeral: true);
-        }
+            [ComponentInteraction("event-configure", true)]
+            public async Task ConfigureEvent(string[] values) => 
+                await PrintConfigureEventDialog(Guid.Parse(values[0]));
 
-        [ComponentInteraction("event-change-time:*")]
-        public async Task ChangeTimeDialog(string guid)
-        {
-            var ev = Events.FindById(Guid.Parse(guid));
+            public async Task PrintConfigureEventDialog(Guid guid)
+            {
+                var ev = Events.FindById(guid);
 
-            if (ev is null) {
-                await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
-                return;
+                if (ev is null) {
+                    await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                    return;
+                }
+
+                var embed = EmbedUtility.FromEvent(ev, Context.Client);
+
+                var component = new ComponentBuilder()
+                    .WithButton("Change Date", $"event-change-date:{ev.Id}", ButtonStyle.Primary, (Emoji)":calendar:")
+                    .WithButton("Change Time", $"event-change-time:{ev.Id}", ButtonStyle.Primary, (Emoji)":clock1:")
+                    .WithButton("Add Targets", $"event-add-targets:{ev.Id}", ButtonStyle.Primary, (Emoji)":loudspeaker:")
+                    .WithButton("Remove Targets", $"event-remove-targets:{ev.Id}", ButtonStyle.Primary, (Emoji)":loudspeaker:")
+                    .WithButton("Delete", $"event-delete:{ev.Id}", ButtonStyle.Danger, (Emoji)":wastebasket:")
+                    .Build();
+
+                await RespondAsync(embed: embed, component: component, ephemeral: true);
             }
         }
 
@@ -164,6 +151,20 @@ namespace CalendarBot
                 await RespondAsync(embed: EmbedUtility.FromError(null, "There was a problem", false), ephemeral: true);
         }
 
+        [SlashCommand("calendar-page", "Display a calendar page")]
+        [Acknowledge(true)]
+        public async Task Test(Months month, int year)
+        {
+            using var bmp = CalendarUtility.GenerateCalendarPage(1200, 800, (int)month, year);
+            using var ms = new MemoryStream();
+
+            bmp.Save(ms, System.Drawing.Imaging.ImageFormat.Png);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var message = await Context.Interaction.FollowupWithFileAsync(ms, "cal.png",
+                embed: EmbedUtility.FromPrimary($":calendar_spiral: {month}, {year}", null, builder => builder.ImageUrl = "attachment://cal.png"), ephemeral: true);
+        }
+
         [SlashCommand("rename", "Change the name of an event")]
         public async Task Rename([Autocomplete(typeof(EventAutocompleter))] Guid guid, [Summary("new-name")] string name)
         {
@@ -178,7 +179,7 @@ namespace CalendarBot
         }
 
         [SlashCommand("delete", "Delete an event")]
-        public async Task Delete(Guid guid)
+        public async Task Delete([Autocomplete(typeof(EventAutocompleter))] Guid guid)
         {
             if (Events.Delete(guid))
                 await RespondAsync(embed: EmbedUtility.FromSuccess(null, "Event deleted.", false), ephemeral: true);
@@ -228,9 +229,9 @@ namespace CalendarBot
             Events.Update(ev);
         }
 
-        [ComponentInteraction("event-target-user:*")]
+        [ComponentInteraction("event-target-user:*,*")]
         [Acknowledge]
-        public async Task ConfigureUsers(string guid, params string[] values)
+        public async Task ConfigureUsers(string guid, string op, params string[] values)
         {
             var users = values.Select(x => Convert.ToUInt64(x));
 
@@ -242,10 +243,19 @@ namespace CalendarBot
             }
 
             if (ev.TargetUsers is not null)
-                ev.TargetUsers.AddRange(users);
+                switch (op) {
+                    case "add":
+                        ev.TargetUsers.AddRange(users);
+                        break;
+                    case "remove":
+                        ev.TargetUsers.RemoveAll(x => users.Contains(x));
+                        break;
+                }
             else {
-                ev.TargetUsers = new List<ulong>();
-                ev.TargetUsers.AddRange(users);
+                if(op == "add") {
+                    ev.TargetUsers = new List<ulong>();
+                    ev.TargetUsers.AddRange(users);
+                }
             }
 
             Events.Update(ev);
@@ -260,6 +270,101 @@ namespace CalendarBot
                 props.Embeds = null;
                 props.Embed = EmbedUtility.FromSuccess(null, "Message Dismissed", false);
             });
+        }
+
+        [ComponentInteraction("event-*-targets:*")]
+        public async Task ChangeTargets(string op, string guid)
+        {
+            var ev = Events.FindById(Guid.Parse(guid));
+
+            await PrintTargetConfigure(ev, op);
+        }
+
+        [ComponentInteraction("event-change-date:*")]
+        public async Task ChangeDateDialog(string guid)
+        {
+            var ev = Events.FindById(Guid.Parse(guid));
+
+            if (ev is null) {
+                await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                return;
+            }
+
+            var component = new ComponentBuilder()
+                .WithButton("1 Day", $"event-time-add-24:{guid}", ButtonStyle.Primary, (Emoji)":heavy_plus_sign:")
+                .WithButton("1 Week", $"event-time-add-{TimeSpan.FromDays(7).TotalHours}:{guid}", ButtonStyle.Primary, (Emoji)":heavy_plus_sign:")
+                .WithButton("1 Month", $"event-time-add-{TimeSpan.FromDays(31).TotalHours}:{guid}", ButtonStyle.Primary, (Emoji)":heavy_plus_sign:")
+                .WithButton("1 Day", $"event-time-substract-24:{guid}", ButtonStyle.Primary, (Emoji)":heavy_minus_sign:", row: 1)
+                .WithButton("1 Week", $"event-time-substract-{TimeSpan.FromDays(7).TotalHours}:{guid}", ButtonStyle.Primary, (Emoji)":heavy_minus_sign:", row: 1)
+                .WithButton("1 Month", $"event-time-substract-{TimeSpan.FromDays(31).TotalHours}:{guid}", ButtonStyle.Primary, (Emoji)":heavy_minus_sign:", row: 1)
+                .Build();
+
+            await RespondAsync(embed: EmbedUtility.FromPrimary($"Configure {ev.Name} event", null), component: component, ephemeral: true);
+        }
+
+        [ComponentInteraction("event-change-time:*")]
+        public async Task ChangeTimeDialog(string guid)
+        {
+            var ev = Events.FindById(Guid.Parse(guid));
+
+            if (ev is null) {
+                await RespondAsync(embed: EmbedUtility.FromError(null, "Event no longer exists.", false));
+                return;
+            }
+
+            var component = new ComponentBuilder()
+                .WithButton("1 Hour", $"event-time-add-1:{guid}", ButtonStyle.Primary, (Emoji)":heavy_plus_sign:")
+                .WithButton("4 Hours", $"event-time-add-4:{guid}", ButtonStyle.Primary, (Emoji)":heavy_plus_sign:")
+                .WithButton("12 Hours", $"event-time-add-12:{guid}", ButtonStyle.Primary, (Emoji)":heavy_plus_sign:")
+                .WithButton("1 Hour", $"event-time-substract-1:{guid}", ButtonStyle.Primary, (Emoji)":heavy_minus_sign:", row: 1)
+                .WithButton("4 Hours", $"event-time-substract-4:{guid}", ButtonStyle.Primary, (Emoji)":heavy_minus_sign:", row: 1)
+                .WithButton("12 Hours", $"event-time-substract-12:{guid}", ButtonStyle.Primary, (Emoji)":heavy_minus_sign:", row: 1)
+                .Build();
+
+            await RespondAsync(embed: EmbedUtility.FromPrimary($"Configure {ev.Name} event", null), component: component, ephemeral: true);
+        }
+
+        [ComponentInteraction("event-time-*-*:*")]
+        [Acknowledge]
+        public Task ChangeDateTime(string op, string hours, string guid)
+        {
+            var ev = Events.FindById(Guid.Parse(guid));
+
+            var hoursInt = Convert.ToInt32(hours);
+
+            switch (op) {
+                case "add":
+                    ev.DateAndTime.AddHours(hoursInt);
+                    break;
+                case "substract":
+                    ev.DateAndTime.Subtract(TimeSpan.FromHours(hoursInt));
+                    break;
+            }
+
+            Events.Update(ev);
+            return Task.CompletedTask;
+        }
+
+        private async Task PrintTargetConfigure(CalendarEvent ev, string suffix)
+        {
+            var roles = Context.Guild.Roles;
+            var users = Context.Guild.Users;
+
+            var targetRoleSelector = new SelectMenuBuilder($"event-target-role:{ev.Id},{suffix}", placeholder: "Select target roles",
+                options: roles.Select(x => new SelectMenuOptionBuilder(x.Name, x.Id.ToString(), isDefault: ev.TargetRoles?.Contains(x.Id))).ToList(), 
+                maxValues: roles.Count);
+
+            var targetUserSelector = new SelectMenuBuilder($"event-target-user:{ev.Id},{suffix}", placeholder: "Select target users",
+                options: users.Select(x => new SelectMenuOptionBuilder(x.Username, x.Id.ToString(), isDefault: ev.TargetUsers?.Contains(x.Id))).ToList(), 
+                maxValues: users.Count);
+
+            var component = new ComponentBuilder()
+                .WithSelectMenu(targetRoleSelector, 0)
+                .WithSelectMenu(targetUserSelector, 1)
+                .WithButton("Dismiss", $"dismiss", ButtonStyle.Secondary, emote: (Emoji)":heavy_multiplication_x:", row: 2)
+                .Build();
+
+            await RespondAsync(embed: EmbedUtility.FromEvent(ev, Context.Client), component: component, ephemeral: true);
         }
     }
 }
