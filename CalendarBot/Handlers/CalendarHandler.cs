@@ -1,8 +1,6 @@
 ﻿using LiteDB;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Timers;
@@ -47,24 +45,18 @@ namespace CalendarBot
             }
         }
 
-        private async Task OnCalendarEvent(CalendarEvent calendarEvent) 
+        private async Task OnCalendarEvent(CalendarEvent calendarEvent)
         {
             try {
-                var embed = new EmbedBuilder {
-                    Title = "Scheduled Event: " + calendarEvent.Name,
-                    Description = calendarEvent.Description,
-                    Color = calendarEvent.Color,
-                    Timestamp = calendarEvent.DateAndTime,
-                }
-                .Build();
+                var embed = EmbedUtility.FromEvent(calendarEvent, _discord);
 
                 var mentionBuilder = new StringBuilder();
 
-                if(calendarEvent.TargetRoles is not null)
+                if (calendarEvent.TargetRoles is not null)
                     foreach (var role in calendarEvent.TargetRoles)
                         mentionBuilder.Append($"<@{role}>");
 
-                if(calendarEvent.TargetUsers is not null)
+                if (calendarEvent.TargetUsers is not null)
                     foreach (var user in calendarEvent.TargetUsers)
                         mentionBuilder.Append($"<@{user}>");
 
