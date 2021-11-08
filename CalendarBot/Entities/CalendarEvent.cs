@@ -15,6 +15,7 @@ namespace CalendarBot
         public ulong UserId { get; set; }
         public ulong MessageChannelId { get; set; }
         public ulong GuildId { get; set; }
+        public DateTime CreatedAt { get; set; }
         public DateTime DateAndTime { get; set; }
         public string Name { get; set; }
         public string Description {  get; set; }
@@ -31,6 +32,7 @@ namespace CalendarBot
         {
             Name = name;
             Description = description;
+            CreatedAt = DateTime.Now;
             UserId = user.Id;
             GuildId = guild.Id;
             DateAndTime = dateAndTime;
