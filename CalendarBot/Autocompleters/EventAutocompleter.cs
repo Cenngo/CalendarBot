@@ -2,24 +2,27 @@
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace CalendarBot
 {
-    internal class EventAutocompleter : Autocompleter
+    public class EventAutocompleter : Autocompleter
     {
+        public ILiteCollection<CalendarEvent> Events {  get; set; }
+        public CultureInfo Culture {  get; set; }
+
         public override Task<AutocompletionResult> GenerateSuggestionsAsync(IInteractionCommandContext context, SocketAutocompleteInteraction autocompleteInteraction, IParameterInfo parameter, IServiceProvider services)
         {
-            var events = services.GetRequiredService<ILiteCollection<CalendarEvent>>();
-
             var value = autocompleteInteraction.Data.Current.Value as string;
 
             if (string.IsNullOrEmpty(value))
                 return Task.FromResult(AutocompletionResult.FromSuccess(null));
             else {
-                var suggestions = events.Find(x => x.Name.StartsWith(value));
-                return Task.FromResult(AutocompletionResult.FromSuccess(suggestions.Select(x => new AutocompleteResult(x.Name, x.Id.ToString()))));
+                var suggestions = Events.Find(x => x.Name.StartsWith(value));
+                return Task.FromResult(AutocompletionResult.FromSuccess(suggestions
+                    .Select(x => new AutocompleteResult($"{x.Name} ({x.DateAndTime.ToString(Culture.DateTimeFormat.ShortTimePattern)} {x.DateAndTime.ToString(Culture.DateTimeFormat.ShortDatePattern)})", x.Id.ToString()))));
             }
         }
 
