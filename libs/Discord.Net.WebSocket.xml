@@ -2974,6 +2974,9 @@
         <member name="P:Discord.WebSocket.SocketGuild.IsBoostProgressBarEnabled">
             <inheritdoc />
         </member>
+        <member name="P:Discord.WebSocket.SocketGuild.Features">
+            <inheritdoc />
+        </member>
         <member name="P:Discord.WebSocket.SocketGuild.CreatedAt">
             <inheritdoc />
         </member>
@@ -3134,9 +3137,6 @@
             <summary>
                 Gets a collection of all custom stickers for this guild.
             </summary>
-        </member>
-        <member name="P:Discord.WebSocket.SocketGuild.Features">
-            <inheritdoc />
         </member>
         <member name="P:Discord.WebSocket.SocketGuild.Users">
             <summary>
@@ -5886,34 +5886,17 @@
         <member name="P:Discord.Commands.SocketCommandContext.Discord#Commands#ICommandContext#Message">
             <inheritdoc/>
         </member>
-        <member name="T:Discord.Interactions.ShardedInteractionCommandContext">
-            <summary>
-            The sharded variant of <see cref="T:Discord.Interactions.SocketInteractionCommandContext"/>
-            </summary>
-        </member>
-        <member name="P:Discord.Interactions.ShardedInteractionCommandContext.Client">
-            <summary>
-            Get the <see cref="T:Discord.WebSocket.DiscordSocketClient"/> that the command will be executed with
-            </summary>
-        </member>
-        <member name="M:Discord.Interactions.ShardedInteractionCommandContext.#ctor(Discord.WebSocket.DiscordShardedClient,Discord.WebSocket.SocketInteraction)">
-            <summary>
-            Initializes a <see cref="T:Discord.Interactions.ShardedInteractionCommandContext"/>
-            </summary>
-            <param name="client">The underlying client.</param>
-            <param name="interaction">The underlying interaction</param>
-        </member>
-        <member name="T:Discord.Interactions.SocketInteractionCommandContext">
+        <member name="T:Discord.Interactions.InteractionContext`2">
             <summary>
             Represents a Web-Socket based context of an Application Command
             </summary>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Client">
+        <member name="P:Discord.Interactions.InteractionContext`2.Client">
             <summary>
             Get the <see cref="T:Discord.WebSocket.DiscordSocketClient"/> that the command will be executed with
             </summary>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Guild">
+        <member name="P:Discord.Interactions.InteractionContext`2.Guild">
             <summary>
             Get the <see cref="T:Discord.WebSocket.SocketGuild"/> the command originated from
             </summary>
@@ -5921,39 +5904,39 @@
             Will be null if the command is from a DM Channel
             </remarks>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Channel">
+        <member name="P:Discord.Interactions.InteractionContext`2.Channel">
             <summary>
             Get the <see cref="T:Discord.WebSocket.ISocketMessageChannel"/> the command originated from
             </summary>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.User">
+        <member name="P:Discord.Interactions.InteractionContext`2.User">
             <summary>
             Get the <see cref="T:Discord.WebSocket.SocketUser"/> who executed the command
             </summary>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Interaction">
+        <member name="P:Discord.Interactions.InteractionContext`2.Interaction">
             <summary>
             Get the <see cref="T:Discord.WebSocket.SocketInteraction"/> the command was recieved with
             </summary>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Discord#IInteractionCommandContext#Client">
+        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Client">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Discord#IInteractionCommandContext#Guild">
+        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Guild">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Discord#IInteractionCommandContext#Channel">
+        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Channel">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Discord#IInteractionCommandContext#User">
+        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#User">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.SocketInteractionCommandContext.Discord#IInteractionCommandContext#Interaction">
+        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Interaction">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.SocketInteractionCommandContext.#ctor(Discord.WebSocket.DiscordSocketClient,Discord.WebSocket.SocketInteraction)">
+        <member name="M:Discord.Interactions.InteractionContext`2.#ctor(`0,`1)">
             <summary>
-            Initializes a new <see cref="T:Discord.Interactions.SocketInteractionCommandContext"/> 
+                Initializes a new <see cref="!:InteractionContext"/> 
             </summary>
             <param name="client">The underlying client</param>
             <param name="interaction">The underlying interaction</param>

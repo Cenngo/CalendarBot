@@ -3095,6 +3095,9 @@
         <member name="P:Discord.Rest.RestGuild.PreferredCulture">
             <inheritdoc />
         </member>
+        <member name="P:Discord.Rest.RestGuild.Features">
+            <inheritdoc />
+        </member>
         <member name="P:Discord.Rest.RestGuild.CreatedAt">
             <inheritdoc />
         </member>
@@ -3121,9 +3124,6 @@
             </summary>
         </member>
         <member name="P:Discord.Rest.RestGuild.Emotes">
-            <inheritdoc />
-        </member>
-        <member name="P:Discord.Rest.RestGuild.Features">
             <inheritdoc />
         </member>
         <member name="M:Discord.Rest.RestGuild.UpdateAsync(Discord.RequestOptions)">

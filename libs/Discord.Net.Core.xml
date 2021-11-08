@@ -479,17 +479,17 @@
                 Indicates that a user can play this song.
             </summary>
         </member>
-        <member name="F:Discord.ActivityProperties.PARTY_PRIVACY_FRIENDS">
+        <member name="F:Discord.ActivityProperties.PartyPrivacyFriends">
             <summary>
                 Indicates that a user is playing an activity in a voice channel with friends.
             </summary>
         </member>
-        <member name="F:Discord.ActivityProperties.PARTY_PRIVACY_VOICE_CHANNEL">
+        <member name="F:Discord.ActivityProperties.PartyPrivacyVoiceChannel">
             <summary>
                 Indicates that a user is playing an activity in a voice channel.
             </summary>
         </member>
-        <member name="F:Discord.ActivityProperties.EMBEDDED">
+        <member name="F:Discord.ActivityProperties.Embedded">
             <summary>
                 Indicates that a user is playing an activity in a voice channel.
             </summary>
@@ -2796,6 +2796,131 @@
         <member name="F:Discord.ExplicitContentFilterLevel.AllMembers">
             <summary> Scan messages sent by all guild members. </summary>
         </member>
+        <member name="F:Discord.GuildFeature.None">
+            <summary>
+                The guild has no features.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.AnimatedIcon">
+            <summary>
+                The guild has access to set an animated guild icon.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Banner">
+            <summary>
+                The guild has access to set a guild banner image.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Commerce">
+            <summary>
+                The guild has access to use commerce features (i.e. create store channels).
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Community">
+            <summary>
+                The guild can enable welcome screen, Membership Screening, stage channels and discovery, and receives community updates.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Discoverable">
+            <summary>
+                The guild is able to be discovered in the directory.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Featureable">
+            <summary>
+                The guild is able to be featured in the directory.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.InviteSplash">
+            <summary>
+                The guild has access to set an invite splash background.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.MemberVerificationGateEnabled">
+            <summary>
+                The guild has enabled <seealso href="https://discord.com/developers/docs/resources/guild#membership-screening-object">Membership Screening</seealso>.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.MonetizationEnabled">
+            <summary>
+                The guild has enabled monetization.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.MoreStickers">
+            <summary>
+                The guild has increased custom sticker slots.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.News">
+            <summary>
+                The guild has access to create news channels.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Partnered">
+            <summary>
+                The guild is partnered.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.PreviewEnabled">
+            <summary>
+                The guild can be previewed before joining via Membership Screening or the directory.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.PrivateThreads">
+            <summary>
+                The guild has access to create private threads.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.RoleIcons">
+            <summary>
+                The guild is able to set role icons.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.SevenDayThreadArchive">
+            <summary>
+                The guild has access to the seven day archive time for threads.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.ThreeDayThreadArchive">
+            <summary>
+                The guild has access to the three day archive time for threads.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.TicketedEventsEnabled">
+            <summary>
+                The guild has enabled ticketed events.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.VanityUrl">
+            <summary>
+                The guild has access to set a vanity URL.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.Verified">
+            <summary>
+                The guild is verified.
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.VIPRegions">
+            <summary>
+                The guild has access to set 384kbps bitrate in voice (previously VIP voice servers).
+            </summary>
+        </member>
+        <member name="F:Discord.GuildFeature.WelcomeScreenEnabled">
+            <summary>
+                The guild has enabled the welcome screen.
+            </summary>
+        </member>
+        <member name="P:Discord.GuildFeatures.Value">
+            <summary>
+                Gets the flags of recognized features for this guild.
+            </summary>
+        </member>
+        <member name="P:Discord.GuildFeatures.Experimental">
+            <summary>
+                Gets a collection of experimental features for this guild.
+            </summary>
+        </member>
         <member name="T:Discord.GuildIntegrationProperties">
             <summary>
                 Provides properties used to modify an <see cref="T:Discord.IGuildIntegration" /> with the specified changes.
@@ -3214,10 +3339,10 @@
         </member>
         <member name="P:Discord.IGuild.Features">
             <summary>
-                Gets a collection of all extra features added to this guild.
+                Gets the features for this guild.
             </summary>
             <returns>
-                A read-only collection of enabled features in this guild.
+                A flags enum containing all the features for the guild.
             </returns>
         </member>
         <member name="P:Discord.IGuild.Roles">
