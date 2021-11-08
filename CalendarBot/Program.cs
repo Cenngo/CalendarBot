@@ -1,22 +1,20 @@
 ﻿global using Discord;
 global using Discord.Interactions;
 global using Discord.WebSocket;
-global using Discord.Rest;
-using CalendarBot.Options;
+using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System;
+using System.Globalization;
 using System.Threading;
 using System.Threading.Tasks;
-using LiteDB;
-using System.Linq;
 
 namespace CalendarBot
 {
     class Program
     {
-        static void Main ( string[] args )
+        static void Main(string[] args)
         {
             var configuration = new ConfigurationBuilder()
                 .AddEnvironmentVariables("DC_")
@@ -27,7 +25,7 @@ namespace CalendarBot
             RunAsync(configuration).GetAwaiter().GetResult();
         }
 
-        async static Task RunAsync ( IConfiguration configuration )
+        async static Task RunAsync(IConfiguration configuration)
         {
             using var services = ConfigureServices(new ServiceCollection(), configuration);
 
@@ -50,9 +48,9 @@ namespace CalendarBot
             await discord.StartAsync();
             await discord.SetActivityAsync(new Game(configuration["Discord:Activity:Name"], configuration.GetValue<ActivityType>("Discord:Activity:Type")));
 
-            Console.CancelKeyPress += ( sender, e ) =>
-            {
+            Console.CancelKeyPress += (sender, e) => {
                 e.Cancel = true;
+                services.GetRequiredService<ILiteDatabase>().Checkpoint();
                 discord.StopAsync().GetAwaiter().GetResult();
                 discord.LogoutAsync().GetAwaiter().GetResult();
                 Environment.Exit(0);
@@ -60,29 +58,27 @@ namespace CalendarBot
             await Task.Delay(Timeout.Infinite);
         }
 
-        static ServiceProvider ConfigureServices ( IServiceCollection serviceCollection, IConfiguration configuration )
+        static ServiceProvider ConfigureServices(IServiceCollection serviceCollection, IConfiguration configuration)
         {
             return serviceCollection
                 //.Configure<LoggingOptions>(configuration.GetSection(LoggingOptions.SECTION))
                 //.Configure<DiscordOptions>(configuration.GetSection(DiscordOptions.SECTION))
                 .AddSingleton(configuration)
-                .AddLogging(builder =>
-                {
+                .AddLogging(builder => {
                     builder.AddSimpleConsole();
+                    builder.SetMinimumLevel(LogLevel.Trace);
                 })
-                .AddSingleton(new DiscordSocketConfig
-                {
+                .AddSingleton(new DiscordSocketConfig {
                     LogLevel = configuration.GetValue<LogLevel>("Logging:Discord").ToDiscord(),
                     GatewayIntents = GatewayIntents.GuildMembers | GatewayIntents.AllUnprivileged,
                     AlwaysDownloadUsers = true
                 })
                 .AddSingleton<DiscordSocketClient>()
-                .AddSingleton(new InteractionServiceConfig
-                {
+                .AddSingleton(new InteractionServiceConfig {
                     DefaultRunMode = RunMode.Async,
                     LogLevel = configuration.GetValue<LogLevel>("Logging:Commands").ToDiscord(),
                     UseCompiledLambda = true,
-                    WildCardExpression = "*"
+                    WildCardExpression = "*",
                 })
                 .AddSingleton<InteractionService>()
                 .AddSingleton<ILiteDatabase>(new LiteDatabase(configuration.GetConnectionString("LiteDB")))
@@ -93,6 +89,8 @@ namespace CalendarBot
                     return collection;
                 })
                 .AddSingleton<CalendarHandler>()
+                .AddSingleton<GuidTypeConverter>()
+                .AddSingleton(CultureInfo.GetCultureInfo(configuration["CultureInfo"]))
                 .BuildServiceProvider();
         }
     }
