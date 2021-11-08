@@ -1,16 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace CalendarBot
 {
     public class Acknowledge : PreconditionAttribute
     {
+        public bool Ephemeral { get; }
+
+        public Acknowledge(bool ephemeral = false)
+        {
+            Ephemeral = ephemeral;
+        }
+
         public override async Task<PreconditionResult> CheckRequirementsAsync(IInteractionCommandContext context, ICommandInfo commandInfo, IServiceProvider services)
         {
-            await context.Interaction.DeferAsync();
+            await context.Interaction.DeferAsync(Ephemeral);
             return PreconditionResult.FromSuccess();
         }
     }
