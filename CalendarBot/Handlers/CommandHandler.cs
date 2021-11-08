@@ -70,7 +70,7 @@ namespace CalendarBot
 
         private async Task Discord_InteractionCreated(SocketInteraction arg)
         {
-            var ctx = new SocketInteractionCommandContext(_discord, arg);
+            var ctx = new InteractionContext<DiscordSocketClient>(_discord, arg);
             await _commands.ExecuteCommandAsync(ctx, _serviceProvider);
         }
 

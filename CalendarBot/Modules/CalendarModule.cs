@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace CalendarBot
 {
-    public sealed class CalendarModule : InteractionModuleBase<SocketInteractionCommandContext>
+    public sealed class CalendarModule : InteractionModuleBase<InteractionContext<DiscordSocketClient>>
     {
         public ILiteCollection<CalendarEvent> Events { get; set; }
         public CultureInfo Culture {  get; set; }
@@ -63,7 +63,7 @@ namespace CalendarBot
         }
 
         [Group("print", "display event information")]
-        public class Print : InteractionModuleBase<SocketInteractionCommandContext>
+        public class Print : InteractionModuleBase<InteractionContext<DiscordSocketClient>>
         {
             public ILiteCollection<CalendarEvent> Events { get; set; }
             public CultureInfo Culture { get; set; }
