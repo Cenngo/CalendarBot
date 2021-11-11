@@ -272,7 +272,7 @@
                 this property is a no-op.
             </summary>
         </member>
-        <member name="M:Discord.Interactions.ParameterPreconditionAttribute.CheckRequirementsAsync(Discord.IInteractionCommandContext,Discord.Interactions.IParameterInfo,System.Object,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.ParameterPreconditionAttribute.CheckRequirementsAsync(Discord.IInteractionContext,Discord.Interactions.IParameterInfo,System.Object,System.IServiceProvider)">
             <summary>
                 Checks whether the condition is met before execution of the command.
             </summary>
@@ -305,7 +305,7 @@
                 this property is a no-op.
             </summary>
         </member>
-        <member name="M:Discord.Interactions.PreconditionAttribute.CheckRequirementsAsync(Discord.IInteractionCommandContext,Discord.Interactions.ICommandInfo,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.PreconditionAttribute.CheckRequirementsAsync(Discord.IInteractionContext,Discord.Interactions.ICommandInfo,System.IServiceProvider)">
             <summary>
                 Checks if the <paramref name="commandInfo"/> command to be executed meets the precondition requirements
             </summary>
@@ -343,10 +343,10 @@
         <member name="P:Discord.Interactions.Autocompleter.InteractionService">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.Autocompleter.GenerateSuggestionsAsync(Discord.IInteractionCommandContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.Autocompleter.GenerateSuggestionsAsync(Discord.IInteractionContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.Autocompleter.ExecuteAsync(Discord.IInteractionCommandContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.Autocompleter.ExecuteAsync(Discord.IInteractionContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.IAutocompleter">
@@ -359,7 +359,7 @@
                 Get the the underlying command service
             </summary>
         </member>
-        <member name="M:Discord.Interactions.IAutocompleter.GenerateSuggestionsAsync(Discord.IInteractionCommandContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.IAutocompleter.GenerateSuggestionsAsync(Discord.IInteractionContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
             <summary>
                 Will be used to generate parameter suggestions
             </summary>
@@ -371,7 +371,7 @@
                 A task representing the execution process. The task result contains the Autocompletion result
             </returns>
         </member>
-        <member name="M:Discord.Interactions.IAutocompleter.ExecuteAsync(Discord.IInteractionCommandContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.IAutocompleter.ExecuteAsync(Discord.IInteractionContext,Discord.WebSocket.SocketAutocompleteInteraction,Discord.Interactions.IParameterInfo,System.IServiceProvider)">
             <summary>
                 Executes the <see cref="T:Discord.Interactions.Autocompleter"/> with the provided context
             </summary>
@@ -458,13 +458,13 @@
         <member name="P:Discord.Interactions.AutocompleteCommandInfo.SupportsWildCards">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.AutocompleteCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.AutocompleteCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.AutocompleteCommandInfo.InvokeModuleEvent(Discord.IInteractionCommandContext,Discord.Interactions.IResult)">
+        <member name="M:Discord.Interactions.AutocompleteCommandInfo.InvokeModuleEvent(Discord.IInteractionContext,Discord.Interactions.IResult)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.AutocompleteCommandInfo.GetLogString(Discord.IInteractionCommandContext)">
+        <member name="M:Discord.Interactions.AutocompleteCommandInfo.GetLogString(Discord.IInteractionContext)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.ExecuteCallback">
@@ -518,10 +518,10 @@
         <member name="P:Discord.Interactions.CommandInfo`1.Parameters">
             <inheritdoc cref="P:Discord.Interactions.ICommandInfo.Parameters"/>
         </member>
-        <member name="M:Discord.Interactions.CommandInfo`1.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.CommandInfo`1.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.CommandInfo`1.CheckPreconditionsAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.CommandInfo`1.CheckPreconditionsAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
         <member name="P:Discord.Interactions.CommandInfo`1.Discord#Interactions#ICommandInfo#Parameters">
@@ -541,10 +541,10 @@
         <member name="P:Discord.Interactions.ComponentCommandInfo.SupportsWildCards">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.ComponentCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.ComponentCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.ComponentCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider,System.String[])">
+        <member name="M:Discord.Interactions.ComponentCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider,System.String[])">
             <summary>
                 Execute this command using dependency injection
             </summary>
@@ -555,7 +555,7 @@
                 A task representing the asyncronous command execution process
             </returns>
         </member>
-        <member name="M:Discord.Interactions.ComponentCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.Collections.Generic.IEnumerable{Discord.Interactions.CommandParameterInfo},System.Collections.Generic.IEnumerable{System.String},System.IServiceProvider)">
+        <member name="M:Discord.Interactions.ComponentCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.Collections.Generic.IEnumerable{Discord.Interactions.CommandParameterInfo},System.Collections.Generic.IEnumerable{System.String},System.IServiceProvider)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.ContextCommandInfo">
@@ -578,7 +578,7 @@
         <member name="P:Discord.Interactions.ContextCommandInfo.IgnoreGroupNames">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.ContextCommandInfo.InvokeModuleEvent(Discord.IInteractionCommandContext,Discord.Interactions.IResult)">
+        <member name="M:Discord.Interactions.ContextCommandInfo.InvokeModuleEvent(Discord.IInteractionContext,Discord.Interactions.IResult)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.MessageCommandInfo">
@@ -586,10 +586,10 @@
                 Represents the info class of an attribute based method for command type <see cref="F:Discord.ApplicationCommandType.Message"/>
             </summary>
         </member>
-        <member name="M:Discord.Interactions.MessageCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.MessageCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.MessageCommandInfo.GetLogString(Discord.IInteractionCommandContext)">
+        <member name="M:Discord.Interactions.MessageCommandInfo.GetLogString(Discord.IInteractionContext)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.UserCommandInfo">
@@ -597,10 +597,10 @@
                 Represents the info class of an attribute based method for command type <see cref="F:Discord.ApplicationCommandType.User"/>
             </summary>
         </member>
-        <member name="M:Discord.Interactions.UserCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.UserCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.UserCommandInfo.GetLogString(Discord.IInteractionCommandContext)">
+        <member name="M:Discord.Interactions.UserCommandInfo.GetLogString(Discord.IInteractionContext)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.SlashCommandInfo">
@@ -625,7 +625,7 @@
         <member name="P:Discord.Interactions.SlashCommandInfo.SupportsWildCards">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.SlashCommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.SlashCommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.IApplicationCommandInfo">
@@ -704,7 +704,7 @@
                 Get a collection of the parameters of this command
             </summary>
         </member>
-        <member name="M:Discord.Interactions.ICommandInfo.ExecuteAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.ICommandInfo.ExecuteAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <summary>
                 Executes the command with the provided context
             </summary>
@@ -714,7 +714,7 @@
                 A task representing the execution process. The task result contains the execution result
             </returns>
         </member>
-        <member name="M:Discord.Interactions.ICommandInfo.CheckPreconditionsAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.ICommandInfo.CheckPreconditionsAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <summary>
                 Check if an execution context meets the command precondition requirements
             </summary>
@@ -764,7 +764,7 @@
                 Get a list of the preconditions this parameter has
             </summary>
         </member>
-        <member name="M:Discord.Interactions.IParameterInfo.CheckPreconditionsAsync(Discord.IInteractionCommandContext,System.Object,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.IParameterInfo.CheckPreconditionsAsync(Discord.IInteractionContext,System.Object,System.IServiceProvider)">
             <summary>
                 Check if an execution context meets the parameter precondition requirements
             </summary>
@@ -889,7 +889,7 @@
         <member name="P:Discord.Interactions.CommandParameterInfo.Preconditions">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.CommandParameterInfo.CheckPreconditionsAsync(Discord.IInteractionCommandContext,System.Object,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.CommandParameterInfo.CheckPreconditionsAsync(Discord.IInteractionContext,System.Object,System.IServiceProvider)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.SlashCommandParameterInfo">
@@ -927,7 +927,7 @@
             </summary>
         </member>
         <member name="T:Discord.Interactions.InteractionCommandContext">
-            <inheritdoc cref="T:Discord.IInteractionCommandContext"/>
+            <inheritdoc cref="T:Discord.IInteractionContext"/>
         </member>
         <member name="P:Discord.Interactions.InteractionCommandContext.Client">
             <inheritdoc/>
@@ -1019,7 +1019,7 @@
         <member name="M:Discord.Interactions.InteractionModuleBase`1.DeleteOriginalResponseAsync">
             <inheritdoc cref="M:Discord.IDeletable.DeleteAsync(Discord.RequestOptions)"/>
         </member>
-        <member name="M:Discord.Interactions.InteractionModuleBase`1.Discord#Interactions#IInteractionModuleBase#SetContext(Discord.IInteractionCommandContext)">
+        <member name="M:Discord.Interactions.InteractionModuleBase`1.Discord#Interactions#IInteractionModuleBase#SetContext(Discord.IInteractionContext)">
             <inheritdoc/>
         </member>
         <member name="T:Discord.Interactions.InteractionModuleBase">
@@ -1225,9 +1225,9 @@
                 indicates whether the <paramref name="module"/> is successfully removed
             </returns>
         </member>
-        <member name="M:Discord.Interactions.InteractionService.ExecuteCommandAsync(Discord.IInteractionCommandContext,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.InteractionService.ExecuteCommandAsync(Discord.IInteractionContext,System.IServiceProvider)">
             <summary>
-                Execute a Command from a given <see cref="T:Discord.IInteractionCommandContext"/>
+                Execute a Command from a given <see cref="T:Discord.IInteractionContext"/>
             </summary>
             <param name="context">Name context of the command</param>
             <param name="services">The service to be used in the command's dependency injection.</param>
@@ -1657,7 +1657,7 @@
         </member>
         <member name="T:Discord.Interactions.TypeConverterResult">
             <summary>
-                Represents a result type for <see cref="M:Discord.Interactions.TypeConverter.ReadAsync(Discord.IInteractionCommandContext,Discord.WebSocket.SocketSlashCommandDataOption,System.IServiceProvider)"/>
+                Represents a result type for <see cref="M:Discord.Interactions.TypeConverter.ReadAsync(Discord.IInteractionContext,Discord.WebSocket.SocketSlashCommandDataOption,System.IServiceProvider)"/>
             </summary>
         </member>
         <member name="P:Discord.Interactions.TypeConverterResult.Value">
@@ -1737,7 +1737,7 @@
             </summary>
             <returns>The option type</returns>
         </member>
-        <member name="M:Discord.Interactions.TypeConverter.ReadAsync(Discord.IInteractionCommandContext,Discord.WebSocket.SocketSlashCommandDataOption,System.IServiceProvider)">
+        <member name="M:Discord.Interactions.TypeConverter.ReadAsync(Discord.IInteractionContext,Discord.WebSocket.SocketSlashCommandDataOption,System.IServiceProvider)">
             <summary>
                 Will be used to read the incoming payload before executing the method body
             </summary>

@@ -1833,6 +1833,14 @@
             <inheritdoc />
             <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
         </member>
+        <member name="M:Discord.WebSocket.SocketDMChannel.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketDMChannel.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
+        </member>
         <member name="M:Discord.WebSocket.SocketDMChannel.DeleteMessageAsync(System.UInt64,Discord.RequestOptions)">
             <inheritdoc />
         </member>
@@ -1896,6 +1904,12 @@
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketDMChannel.Discord#IMessageChannel#SendFileAsync(System.IO.Stream,System.String,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketDMChannel.Discord#IMessageChannel#SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketDMChannel.Discord#IMessageChannel#SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketDMChannel.Discord#IMessageChannel#SendMessageAsync(System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
@@ -2024,6 +2038,14 @@
             <inheritdoc />
             <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
         </member>
+        <member name="M:Discord.WebSocket.SocketGroupChannel.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketGroupChannel.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
+        </member>
         <member name="M:Discord.WebSocket.SocketGroupChannel.DeleteMessageAsync(System.UInt64,Discord.RequestOptions)">
             <inheritdoc />
         </member>
@@ -2084,6 +2106,12 @@
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGroupChannel.Discord#IMessageChannel#SendFileAsync(System.IO.Stream,System.String,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGroupChannel.Discord#IMessageChannel#SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketGroupChannel.Discord#IMessageChannel#SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketGroupChannel.Discord#IMessageChannel#SendMessageAsync(System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
@@ -2481,6 +2509,14 @@
             <inheritdoc />
             <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
         </member>
+        <member name="M:Discord.WebSocket.SocketTextChannel.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
+        </member>
+        <member name="M:Discord.WebSocket.SocketTextChannel.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+            <exception cref="T:System.ArgumentOutOfRangeException">Message content is too long, length must be less or equal to <see cref="F:Discord.DiscordConfig.MaxMessageSize"/>.</exception>
+        </member>
         <member name="M:Discord.WebSocket.SocketTextChannel.DeleteMessagesAsync(System.Collections.Generic.IEnumerable{Discord.IMessage},Discord.RequestOptions)">
             <inheritdoc />
         </member>
@@ -2587,6 +2623,12 @@
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketTextChannel.Discord#IMessageChannel#SendFileAsync(System.IO.Stream,System.String,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,System.Boolean,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketTextChannel.Discord#IMessageChannel#SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <inheritdoc />
+        </member>
+        <member name="M:Discord.WebSocket.SocketTextChannel.Discord#IMessageChannel#SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
             <inheritdoc />
         </member>
         <member name="M:Discord.WebSocket.SocketTextChannel.Discord#IMessageChannel#SendMessageAsync(System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
@@ -4183,6 +4225,12 @@
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketApplicationCommandOption.IsRequired">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketApplicationCommandOption.MinValue">
+            <inheritdoc/>
+        </member>
+        <member name="P:Discord.WebSocket.SocketApplicationCommandOption.MaxValue">
             <inheritdoc/>
         </member>
         <member name="P:Discord.WebSocket.SocketApplicationCommandOption.Choices">
@@ -5886,17 +5934,34 @@
         <member name="P:Discord.Commands.SocketCommandContext.Discord#Commands#ICommandContext#Message">
             <inheritdoc/>
         </member>
-        <member name="T:Discord.Interactions.InteractionContext`2">
+        <member name="T:Discord.Interactions.ShardedInteractionContext`1">
             <summary>
-            Represents a Web-Socket based context of an Application Command
+            The sharded variant of <see cref="!:SocketInteractionCommandContext"/>
             </summary>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Client">
+        <member name="P:Discord.Interactions.ShardedInteractionContext`1.Client">
             <summary>
             Get the <see cref="T:Discord.WebSocket.DiscordSocketClient"/> that the command will be executed with
             </summary>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Guild">
+        <member name="M:Discord.Interactions.ShardedInteractionContext`1.#ctor(Discord.WebSocket.DiscordShardedClient,`0)">
+            <summary>
+            Initializes a <see cref="!:ShardedInteractionCommandContext"/>
+            </summary>
+            <param name="client">The underlying client.</param>
+            <param name="interaction">The underlying interaction</param>
+        </member>
+        <member name="T:Discord.Interactions.SocketInteractionContext`1">
+            <summary>
+            Represents a Web-Socket based context of an Application Command
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Client">
+            <summary>
+            Get the <see cref="T:Discord.WebSocket.DiscordSocketClient"/> that the command will be executed with
+            </summary>
+        </member>
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Guild">
             <summary>
             Get the <see cref="T:Discord.WebSocket.SocketGuild"/> the command originated from
             </summary>
@@ -5904,37 +5969,37 @@
             Will be null if the command is from a DM Channel
             </remarks>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Channel">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Channel">
             <summary>
             Get the <see cref="T:Discord.WebSocket.ISocketMessageChannel"/> the command originated from
             </summary>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.User">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.User">
             <summary>
             Get the <see cref="T:Discord.WebSocket.SocketUser"/> who executed the command
             </summary>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Interaction">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Interaction">
             <summary>
             Get the <see cref="T:Discord.WebSocket.SocketInteraction"/> the command was recieved with
             </summary>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Client">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IInteractionContext#Client">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Guild">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IInteractionContext#Guild">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Channel">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IInteractionContext#Channel">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#User">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IInteractionContext#User">
             <inheritdoc/>
         </member>
-        <member name="P:Discord.Interactions.InteractionContext`2.Discord#IInteractionCommandContext#Interaction">
+        <member name="P:Discord.Interactions.SocketInteractionContext`1.Discord#IInteractionContext#Interaction">
             <inheritdoc/>
         </member>
-        <member name="M:Discord.Interactions.InteractionContext`2.#ctor(`0,`1)">
+        <member name="M:Discord.Interactions.SocketInteractionContext`1.#ctor(Discord.WebSocket.DiscordSocketClient,`0)">
             <summary>
                 Initializes a new <see cref="!:InteractionContext"/> 
             </summary>

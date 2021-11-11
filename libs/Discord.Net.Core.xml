@@ -1662,6 +1662,66 @@
                 contains the sent message.
             </returns>
         </member>
+        <member name="M:Discord.IMessageChannel.SendFileAsync(Discord.FileAttachment,System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <summary>
+                Sends a file to this message channel with an optional caption.
+            </summary>
+            <remarks>
+                This method sends a file as if you are uploading an attachment directly from your Discord client.
+                <note>
+                    If you wish to upload an image and have it embedded in a <see cref="F:Discord.EmbedType.Rich"/> embed,
+                    you may upload the file and refer to the file with "attachment://filename.ext" in the
+                    <see cref="P:Discord.EmbedBuilder.ImageUrl"/>. See the example section for its usage.
+                </note>
+            </remarks>
+            <param name="attachment">The attachment containing the file and description.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="isTTS">Whether the message should be read aloud by Discord or not.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich"/> <see cref="T:Discord.Embed"/> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="messageReference">The message references to be included. Used to reply to specific messages.</param>
+            <param name="component">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the file.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <returns>
+                A task that represents an asynchronous send operation for delivering the message. The task result
+                contains the sent message.
+            </returns>
+        </member>
+        <member name="M:Discord.IMessageChannel.SendFilesAsync(System.Collections.Generic.IEnumerable{Discord.FileAttachment},System.String,System.Boolean,Discord.Embed,Discord.RequestOptions,Discord.AllowedMentions,Discord.MessageReference,Discord.MessageComponent,Discord.ISticker[],Discord.Embed[])">
+            <summary>
+                Sends a collection of files to this message channel.
+            </summary>
+            <remarks>
+                This method sends files as if you are uploading attachments directly from your Discord client.
+                <note>
+                    If you wish to upload an image and have it embedded in a <see cref="F:Discord.EmbedType.Rich"/> embed,
+                    you may upload the file and refer to the file with "attachment://filename.ext" in the
+                    <see cref="P:Discord.EmbedBuilder.ImageUrl"/>. See the example section for its usage.
+                </note>
+            </remarks>
+            <param name="attachments">A collection of attachments to upload.</param>
+            <param name="text">The message to be sent.</param>
+            <param name="isTTS">Whether the message should be read aloud by Discord or not.</param>
+            <param name="embed">The <see cref="F:Discord.EmbedType.Rich"/> <see cref="T:Discord.Embed"/> to be sent.</param>
+            <param name="options">The options to be used when sending the request.</param>
+            <param name="allowedMentions">
+                Specifies if notifications are sent for mentioned users and roles in the message <paramref name="text"/>.
+                If <c>null</c>, all mentioned roles and users will be notified.
+            </param>
+            <param name="messageReference">The message references to be included. Used to reply to specific messages.</param>
+            <param name="component">The message components to be included with this message. Used for interactions.</param>
+            <param name="stickers">A collection of stickers to send with the file.</param>
+            <param name="embeds">A array of <see cref="T:Discord.Embed"/>s to send with this response. Max 10.</param>
+            <returns>
+                A task that represents an asynchronous send operation for delivering the message. The task result
+                contains the sent message.
+            </returns>
+        </member>
         <member name="M:Discord.IMessageChannel.GetMessageAsync(System.UInt64,Discord.CacheMode,Discord.RequestOptions)">
             <summary>
                 Gets a message from this message channel.
@@ -4750,6 +4810,16 @@
                 Gets or sets whether or not this option supports autocomplete.
             </summary>
         </member>
+        <member name="P:Discord.ApplicationCommandOptionProperties.MinValue">
+            <summary>
+                Gets or sets the smallest number value the user can input.
+            </summary>
+        </member>
+        <member name="P:Discord.ApplicationCommandOptionProperties.MaxValue">
+            <summary>
+                Gets or sets the largest number value the user can input.
+            </summary>
+        </member>
         <member name="P:Discord.ApplicationCommandOptionProperties.Choices">
             <summary>
                 Gets or sets the choices for string and int types for the user to pick from.
@@ -5163,6 +5233,16 @@
         <member name="P:Discord.IApplicationCommandOption.IsRequired">
             <summary>
                 If the parameter is required or optional, default is <see langword="false"/>.
+            </summary>
+        </member>
+        <member name="P:Discord.IApplicationCommandOption.MinValue">
+            <summary>
+                The smallest number value the user can input.
+            </summary>
+        </member>
+        <member name="P:Discord.IApplicationCommandOption.MaxValue">
+            <summary>
+                The largest number value the user can input.
             </summary>
         </member>
         <member name="P:Discord.IApplicationCommandOption.Choices">
@@ -6235,7 +6315,7 @@
             <param name="value">The default permission value to set.</param>
             <returns>The current builder.</returns>
         </member>
-        <member name="M:Discord.SlashCommandBuilder.AddOption(System.String,Discord.ApplicationCommandOptionType,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Boolean,System.Collections.Generic.List{Discord.SlashCommandOptionBuilder},System.Collections.Generic.List{Discord.ChannelType},Discord.ApplicationCommandOptionChoiceProperties[])">
+        <member name="M:Discord.SlashCommandBuilder.AddOption(System.String,Discord.ApplicationCommandOptionType,System.String,System.Nullable{System.Boolean},System.Nullable{System.Boolean},System.Boolean,System.Nullable{System.Double},System.Nullable{System.Double},System.Collections.Generic.List{Discord.SlashCommandOptionBuilder},System.Collections.Generic.List{Discord.ChannelType},Discord.ApplicationCommandOptionChoiceProperties[])">
             <summary>
                 Adds an option to the current slash command.
             </summary>
@@ -6248,6 +6328,8 @@
             <param name="options">The options of the option to add.</param>
             <param name="channelTypes">The allowed channel types for this option.</param>
             <param name="choices">The choices of this option.</param>
+            <param name="minValue">The smallest number value the user can input.</param>
+            <param name="maxValue">The largest number value the user can input.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.SlashCommandBuilder.AddOption(System.String,Discord.ApplicationCommandOptionType,System.String)">
@@ -6318,6 +6400,16 @@
                 Gets or sets whether or not this option supports autocomplete.
             </summary>
         </member>
+        <member name="P:Discord.SlashCommandOptionBuilder.MinValue">
+            <summary>
+                Gets or sets the smallest number value the user can input.
+            </summary>
+        </member>
+        <member name="P:Discord.SlashCommandOptionBuilder.MaxValue">
+            <summary>
+                Gets or sets the largest number value the user can input.
+            </summary>
+        </member>
         <member name="P:Discord.SlashCommandOptionBuilder.Choices">
             <summary>
                 Gets or sets the choices for string and int types for the user to pick from.
@@ -6339,7 +6431,7 @@
             </summary>
             <returns>The built version of this option.</returns>
         </member>
-        <member name="M:Discord.SlashCommandOptionBuilder.AddOption(System.String,Discord.ApplicationCommandOptionType,System.String,System.Nullable{System.Boolean},System.Boolean,System.Boolean,System.Collections.Generic.List{Discord.SlashCommandOptionBuilder},System.Collections.Generic.List{Discord.ChannelType},Discord.ApplicationCommandOptionChoiceProperties[])">
+        <member name="M:Discord.SlashCommandOptionBuilder.AddOption(System.String,Discord.ApplicationCommandOptionType,System.String,System.Nullable{System.Boolean},System.Boolean,System.Boolean,System.Nullable{System.Double},System.Nullable{System.Double},System.Collections.Generic.List{Discord.SlashCommandOptionBuilder},System.Collections.Generic.List{Discord.ChannelType},Discord.ApplicationCommandOptionChoiceProperties[])">
             <summary>
                 Adds an option to the current slash command.
             </summary>
@@ -6352,6 +6444,8 @@
             <param name="options">The options of the option to add.</param>
             <param name="channelTypes">The allowed channel types for this option.</param>
             <param name="choices">The choices of this option.</param>
+            <param name="minValue">The smallest number value the user can input.</param>
+            <param name="maxValue">The largest number value the user can input.</param>
             <returns>The current builder.</returns>
         </member>
         <member name="M:Discord.SlashCommandOptionBuilder.AddOption(Discord.SlashCommandOptionBuilder)">
@@ -6415,6 +6509,20 @@
         <member name="M:Discord.SlashCommandOptionBuilder.WithAutocomplete(System.Boolean)">
             <summary>
                 Sets the current builders autocomplete field.
+            </summary>
+            <param name="value">The value to set.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.SlashCommandOptionBuilder.WithMinValue(System.Double)">
+            <summary>
+                Sets the current builders min value field.
+            </summary>
+            <param name="value">The value to set.</param>
+            <returns>The current builder.</returns>
+        </member>
+        <member name="M:Discord.SlashCommandOptionBuilder.WithMaxValue(System.Double)">
+            <summary>
+                Sets the current builders max value field.
             </summary>
             <param name="value">The value to set.</param>
             <returns>The current builder.</returns>
@@ -7588,6 +7696,44 @@
                 A string that resolves to <see cref="P:Discord.EmbedVideo.Url"/>.
             </returns>
         </member>
+        <member name="M:Discord.FileAttachment.#ctor(System.IO.Stream,System.String,System.String,System.Boolean)">
+            <summary>
+                Creates a file attachment from a stream.
+            </summary>
+            <param name="stream">The stream to create the attachment from.</param>
+            <param name="fileName">The name of the attachment.</param>
+            <param name="description">The description of the attachment.</param>
+        </member>
+        <member name="M:Discord.FileAttachment.#ctor(System.String,System.String,System.Boolean)">
+            <summary>
+                Create the file attachment from a file path.
+            </summary>
+            <remarks>
+                This file path is NOT validated and is passed directly into a
+                <see cref="M:System.IO.File.OpenRead(System.String)"/>.
+            </remarks>
+            <param name="path">The path to the file.</param>
+            <exception cref="T:System.ArgumentException">
+            <paramref name="path" /> is a zero-length string, contains only white space, or contains one or more invalid
+            characters as defined by <see cref="M:System.IO.Path.GetInvalidPathChars"/>.
+            </exception>
+            <exception cref="T:System.ArgumentNullException"><paramref name="path" /> is <c>null</c>.</exception>
+            <exception cref="T:System.IO.PathTooLongException">
+            The specified path, file name, or both exceed the system-defined maximum length. For example, on
+            Windows-based platforms, paths must be less than 248 characters, and file names must be less than 260
+            characters.
+            </exception>
+            <exception cref="T:System.NotSupportedException"><paramref name="path" /> is in an invalid format.</exception>
+            <exception cref="T:System.IO.DirectoryNotFoundException">
+            The specified <paramref name="path"/> is invalid, (for example, it is on an unmapped drive).
+            </exception>
+            <exception cref="T:System.UnauthorizedAccessException">
+            <paramref name="path" /> specified a directory.-or- The caller does not have the required permission.
+            </exception>
+            <exception cref="T:System.IO.FileNotFoundException">The file specified in <paramref name="path" /> was not found.
+            </exception>
+            <exception cref="T:System.IO.IOException">An I/O error occurred while opening the file. </exception>
+        </member>
         <member name="T:Discord.IAttachment">
             <summary>
                 Represents a message attachment found in a <see cref="T:Discord.IUserMessage"/>.
@@ -8380,6 +8526,11 @@
         <member name="P:Discord.MessageProperties.AllowedMentions">
             <summary>
                 Gets or sets the allowed mentions of the message.
+            </summary>
+        </member>
+        <member name="P:Discord.MessageProperties.Attachments">
+            <summary>
+                Gets or sets the attachments for the message.
             </summary>
         </member>
         <member name="T:Discord.MessageReference">
@@ -12155,17 +12306,17 @@
                 that represents the gateway information related to the bot.
             </returns>
         </member>
-        <member name="T:Discord.IInteractionCommandContext">
+        <member name="T:Discord.IInteractionContext">
             <summary>
                 Represents the context of an Interaction
             </summary>
         </member>
-        <member name="P:Discord.IInteractionCommandContext.Client">
+        <member name="P:Discord.IInteractionContext.Client">
             <summary>
                 Client that will be used to handle this interaction
             </summary>
         </member>
-        <member name="P:Discord.IInteractionCommandContext.Guild">
+        <member name="P:Discord.IInteractionContext.Guild">
             <summary>
                 Guild the interaction originated from
             </summary>
@@ -12173,17 +12324,17 @@
                 Will be <see langword="null"/> if the interaction originated from a DM channel or the interaction was a Context Command interaction
             </remarks>
         </member>
-        <member name="P:Discord.IInteractionCommandContext.Channel">
+        <member name="P:Discord.IInteractionContext.Channel">
             <summary>
                 Channel the interaction originated from
             </summary>
         </member>
-        <member name="P:Discord.IInteractionCommandContext.User">
+        <member name="P:Discord.IInteractionContext.User">
             <summary>
                 User who invoked the interaction event
             </summary>
         </member>
-        <member name="P:Discord.IInteractionCommandContext.Interaction">
+        <member name="P:Discord.IInteractionContext.Interaction">
             <summary>
                 The underlying interaction
             </summary>
