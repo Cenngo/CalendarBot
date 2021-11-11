@@ -35,7 +35,7 @@ namespace CalendarBot
             _commands.SlashCommandExecuted += SlashCommandExecuted;
         }
 
-        private async Task SlashCommandExecuted(SlashCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
+        private async Task SlashCommandExecuted(SlashCommandInfo arg1, IInteractionContext arg2, IResult arg3)
         {
             if (!arg3.IsSuccess)
                 try {
@@ -46,7 +46,7 @@ namespace CalendarBot
                 }
         }
 
-        private async Task ContextCommandExecuted(ContextCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
+        private async Task ContextCommandExecuted(ContextCommandInfo arg1, IInteractionContext arg2, IResult arg3)
         {
             if (!arg3.IsSuccess)
                 try {
@@ -57,7 +57,7 @@ namespace CalendarBot
                 }
         }
 
-        private async Task ComponentCommandExecuted(ComponentCommandInfo arg1, IInteractionCommandContext arg2, IResult arg3)
+        private async Task ComponentCommandExecuted(ComponentCommandInfo arg1, IInteractionContext arg2, IResult arg3)
         {
             if (!arg3.IsSuccess)
                 try {
@@ -70,7 +70,7 @@ namespace CalendarBot
 
         private async Task Discord_InteractionCreated(SocketInteraction arg)
         {
-            var ctx = new InteractionContext<DiscordSocketClient>(_discord, arg);
+            var ctx = new SocketInteractionContext(_discord, arg);
             await _commands.ExecuteCommandAsync(ctx, _serviceProvider);
         }
 

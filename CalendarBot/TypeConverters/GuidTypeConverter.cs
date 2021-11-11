@@ -6,7 +6,7 @@ namespace CalendarBot
     internal class GuidTypeConverter : TypeConverter<Guid>
     {
         public override ApplicationCommandOptionType GetDiscordType() => ApplicationCommandOptionType.String;
-        public override Task<TypeConverterResult> ReadAsync(IInteractionCommandContext context, SocketSlashCommandDataOption option, IServiceProvider services)
+        public override Task<TypeConverterResult> ReadAsync(IInteractionContext context, SocketSlashCommandDataOption option, IServiceProvider services)
         {
             if (Guid.TryParse(option.Value as string, out var guid))
                 return Task.FromResult(TypeConverterResult.FromSuccess(guid));

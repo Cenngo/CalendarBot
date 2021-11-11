@@ -12,7 +12,7 @@ namespace CalendarBot
             Ephemeral = ephemeral;
         }
 
-        public override async Task<PreconditionResult> CheckRequirementsAsync(IInteractionCommandContext context, ICommandInfo commandInfo, IServiceProvider services)
+        public override async Task<PreconditionResult> CheckRequirementsAsync(IInteractionContext context, ICommandInfo commandInfo, IServiceProvider services)
         {
             await context.Interaction.DeferAsync(Ephemeral);
             return PreconditionResult.FromSuccess();
