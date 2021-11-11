@@ -1,7 +1,6 @@
 ﻿global using Discord;
 global using Discord.Interactions;
 global using Discord.WebSocket;
-using CalendarBot.TypeConverters;
 using LiteDB;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -87,11 +86,13 @@ class Program
                 var collection = services.GetRequiredService<ILiteDatabase>().GetCollection<CalendarEvent>();
                 collection.EnsureIndex(x => x.DateAndTime);
                 collection.EnsureIndex(x => x.Name);
+                collection.EnsureIndex(x => x.GuildId);
                 return collection;
             })
             .AddSingleton<CalendarHandler>()
             .AddSingleton<GuidTypeConverter>()
             .AddSingleton(CultureInfo.GetCultureInfo(configuration["CultureInfo"]))
+            .AddMemoryCache()
             .BuildServiceProvider();
     }
 }
