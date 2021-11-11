@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -39,18 +40,25 @@ namespace CalendarBot
             return builder.Build();
         }
 
-        public static Embed FromEvent(CalendarEvent ev, BaseSocketClient discord) =>
-            new EmbedBuilder {
+        public static Embed FromEvent(CalendarEvent ev, BaseSocketClient discord, CultureInfo cultureInfo)
+        {
+            var guild = discord.GetGuild(ev.GuildId);
+
+            return new EmbedBuilder {
                 Title = "Scheduled Event: " + ev.Name,
                 Description = ev.Description,
-                Color = EmbedUtility.Primary,
-                Timestamp = ev.DateAndTime
+                Color = Primary
             }.AddEmptyField()
-            .AddField("Recursion Interval", ev.RecursionInterval, true)
-            .AddField("Created At", ev.CreatedAt.ToString("dd/MMM/yyyy"), true)
-            .AddField("Event Id", ev.Id)
+            .AddField("Recursion Interval", ev.RecursionInterval, false)
+            .AddField("Date", ev.DateAndTime.ToString(cultureInfo.DateTimeFormat.ShortDatePattern), true)
+            .AddField("Time", ev.DateAndTime.ToString(cultureInfo.DateTimeFormat.ShortTimePattern), true)
+            .AddField("Created At", ev.CreatedAt.ToString(cultureInfo.DateTimeFormat.ShortDatePattern), true)
+            .AddEmptyField()
+            .AddField("Attendee Roles", ev.TargetRoles is not null ? string.Join('\n', ev.TargetRoles?.Select(x => guild.GetRole(x).Mention)) : " - ", true)
+            .AddField("Attendee Users", ev.TargetUsers is not null ? string.Join('\n', ev.TargetUsers?.Select(x => $"<@{x}>")) : " - ", true)
             .WithAuthor(discord.GetUser(ev.UserId))
             .Build();
+        }
 
         public static Embed FromSuccess(string title, string description, bool addToTitle = true) =>
             new EmbedBuilder {
